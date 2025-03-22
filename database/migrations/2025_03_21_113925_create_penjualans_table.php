@@ -16,6 +16,7 @@ return new class extends Migration
             ->primary();
             $table->double('total_harga');
             $table->string('status',10)->default('pending');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

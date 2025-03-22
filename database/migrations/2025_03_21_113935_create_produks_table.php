@@ -16,6 +16,7 @@ return new class extends Migration
             ->primary();
             $table->string('nama',25);
             $table->double('harga');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

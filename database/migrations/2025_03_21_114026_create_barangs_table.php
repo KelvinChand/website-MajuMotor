@@ -15,10 +15,12 @@ return new class extends Migration
             $table->uuid('idBarang')
             ->primary();
             $table->integer('stok');
+            $table->string('jenis', 25);
             $table->foreignUuid('idProduk')
             ->references('idProduk')
             ->on('produks')
             ->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

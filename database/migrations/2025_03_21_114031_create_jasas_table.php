@@ -19,6 +19,7 @@ return new class extends Migration
                 ->references('idProduk')
                 ->on('produks')
                 ->onDelete('cascade');
+            $table->softDeletes();
         });
     }
 

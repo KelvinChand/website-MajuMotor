@@ -18,6 +18,7 @@ return new class extends Migration
                 ->references('idPenjualan')
                 ->on('penjualans')
                 ->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
