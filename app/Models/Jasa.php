@@ -29,7 +29,7 @@ class Jasa extends Model
     {
         parent::boot();
         static::creating(callback: function ($model): void {
-            $model->idPenjualanProduk = Str::uuid();
+            $model->idJasa = Str::uuid();
         });
     }
 

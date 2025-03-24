@@ -27,7 +27,7 @@ class Invoice extends Model
     {
         parent::boot();
         static::creating(callback: function ($model): void {
-            $model->idPenjualanProduk = Str::uuid();
+            $model->idInvoice = Str::uuid();
         });
     }
 
