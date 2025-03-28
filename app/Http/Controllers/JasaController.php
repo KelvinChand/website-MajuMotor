@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produk;
 use App\Models\Jasa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class JasaController extends Controller
 {
@@ -21,32 +23,82 @@ class JasaController extends Controller
         return view('product.jasa', compact('jasa'));
     }
 
-    // public function update(Request $request, $idJasa)
-    // {
-    //     $Jasa = Jasa::find($idJasa);
+    public function store(Request $request)
+    {
+        $attributes = $request->validate([
+            'nama' => ['required', 'string'],
+            'harga' => ['required', 'numeric'],
+            'deskripsiKeluhan' => ['required', 'string'],
+        ]);
 
-    //     if (!$Jasa) {
-    //         return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
-    //     }
+        DB::beginTransaction();
 
-    //     $attributes = $request->validate([
-    //         'deskripsiKeluhan' => ['string'],
-    //     ]);
+        try {
+            // Simpan ke tabel produk
+            $produk = Produk::create([
+                'nama' => $attributes['nama'],
+                'harga' => $attributes['harga'],
+            ]);
+            
+            // Pastikan produk berhasil disimpan dan memiliki ID
+            if (!$produk || !$produk->idProduk) {
+                throw new \Exception('Gagal menyimpan data produk');
+            }
 
-    //     $Jasa->update($attributes);
+            // Simpan ke tabel barang dengan idProduk yang valid
+            $jasa = Jasa::create([
+                'idProduk' => $produk->idProduk,
+                'deskripsiKeluhan' => $attributes['deskripsiKeluhan'] ?? null,
+            ]);
 
-    //     return response()->json(['message' => 'Data Jasa Berhasil Diperbarui', 'Jasa' => $Jasa], 200);
-    // }
+            DB::commit();
+            return redirect('jasa')->with("Berhasil Menyimpan Data");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Gagal Menyimpan Data', 'error' => $e->getMessage()], 500);
+        }
+    }
 
-    // public function destroy($idJasa)
-    // {
-    //     $Jasa = Jasa::find($idJasa);
+    public function update(Request $request, $idJasa)
+    {
+        $Jasa = Jasa::find($idJasa);
 
-    //     if (!$Jasa) {
-    //         return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
-    //     }
+        if (!$Jasa) {
+            return response()->json(['message' => 'Jasa tidak ditemukan'], 404);
+        }
 
-    //     $Jasa->delete();
-    //     return response()->json(['message' => 'Data Jasa Berhasil Dihapus'], 200);
-    // }
+        $attributes = $request->validate([
+            'deskripsiKeluhan' => ['string'],
+            'nama' => ['required', 'string'],
+            'harga' => ['required', 'numeric'],
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            $Jasa->update(['deskripsiKeluhan' => $attributes['deskripsiKeluhan']]);
+            $Jasa->produk->update([
+                'nama' => $attributes['nama'],
+                'harga' => $attributes['harga'],
+            ]);
+
+            DB::commit();
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back();
+        }
+    }
+
+    public function destroy($idJasa)
+    {
+        $Jasa = Jasa::find($idJasa);
+
+        if (!$Jasa) {
+            return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
+        }
+
+        $Jasa->delete();
+        return response()->json(['message' => 'Data Jasa Berhasil Dihapus'], 200);
+    }
 }

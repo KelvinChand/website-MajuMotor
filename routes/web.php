@@ -79,8 +79,6 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('invoice');
 });
 
-
-
 Route::group(['middleware' => 'guest'], function () {
 	Route::get('/register', [RegisterController::class, 'create']);
 	Route::post('/register', [RegisterController::class, 'store']);
@@ -91,3 +89,14 @@ Route::group(['middleware' => 'guest'], function () {
 Route::get('/login', function () {
 	return view('session/login-session');
 })->name('login');
+
+
+// Barang Route
+Route::post('/barang/store', [BarangController::class, 'store'])->name('barang.store');
+Route::delete('/barang/{idBarang}', [BarangController::class, 'destroy'])->name('barang.delete');
+Route::put('/barang/{idBarang}/update', [BarangController::class, 'update'])->name('barang.update');
+
+// Jasa Route
+Route::post('/jasa/store', [JasaController::class, 'store'])->name('jasa.store');
+Route::delete('/jasa/{idJasa}', [JasaController::class, 'destroy'])->name('jasa.delete');
+Route::put('/jasa/{idJasa}/update', [JasaController::class, 'update'])->name('jasa.update');
