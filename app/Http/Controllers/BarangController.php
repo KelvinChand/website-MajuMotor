@@ -17,6 +17,12 @@ class BarangController extends Controller
         ], 200);
     }
 
+    public function indexWeb()
+    {
+        $barang = Barang::with('produk')->get();
+        return view('product.barang', compact('barang'));
+    }
+
 
     // public function update(Request $request, $idBarang)
     // {

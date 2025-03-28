@@ -15,6 +15,11 @@ class JasaController extends Controller
             'data' => $Jasa
         ], 200);
     }
+    public function indexWeb()
+    {
+        $jasa = Jasa::with('produk')->get();
+        return view('product.jasa', compact('jasa'));
+    }
 
     // public function update(Request $request, $idJasa)
     // {

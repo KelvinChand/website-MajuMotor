@@ -3,188 +3,153 @@
 @section('content')
 
   <div class="container-fluid">
-    <div class="row gx-2 d-flex justify-content-between">
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card">
-      <div class="card-body p-3">
-        <div class="row">
-        <div class="col-8">
-          <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Data</p>
-          <h5 class="font-weight-bolder mb-0">
-            Barang
-          </h5>
-          </div>
+    <div class="row g-2 d-flex justify-content-between">
+    <div class="col-xl-6 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('barang') ? 'active' : '') }}" href="{{ url('barang') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-box-2 text-white" style="font-size: 40px;" aria-hidden="true"></i>
         </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-          </div>
-        </div>
+        <h6 class="font-weight-bolder mb-0">Data Barang</h6>
         </div>
       </div>
-      </div>
+      </a>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card">
-      <div class="card-body p-3">
-        <div class="row">
-        <div class="col-8">
-          <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Data</p>
-          <h5 class="font-weight-bolder mb-0">
-            Jasa
-          </h5>
-          </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('jasa') ? 'active' : '') }}" href="{{ url('jasa') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-briefcase-24 text-white" style="font-size: 40px;" aria-hidden="true"></i>
         </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-          </div>
-        </div>
+        <h6 class="font-weight-bolder mb-0">Data Jasa</h6>
         </div>
       </div>
-      </div>
+      </a>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card">
-      <div class="card-body p-3">
-        <div class="row">
-        <div class="col-8">
-          <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Data</p>
-          <h5 class="font-weight-bolder mb-0">
-            Barang
-          </h5>
-          </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('penjualan') ? 'active' : '') }}" href="{{ url('penjualan') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-cart text-white" style="font-size: 40px;" aria-hidden="true"></i>
         </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-          </div>
-        </div>
+        <h6 class="font-weight-bolder mb-0">Data Penjualan</h6>
         </div>
       </div>
-      </div>
+      </a>
     </div>
 
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <div class="card">
-      <div class="card-body p-3">
-        <div class="row">
-        <div class="col-8">
-          <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Data</p>
-          <h5 class="font-weight-bolder mb-0">
-            Jasa
-          </h5>
-          </div>
+    <div class="col-xl-6 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('invoice') ? 'active' : '') }}" href="{{ url('invoice') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-single-copy-04 text-white" style="font-size: 40px;" aria-hidden="true"></i>
         </div>
-        <div class="col-4 text-end">
-          <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-          </div>
-        </div>
+        <h6 class="font-weight-bolder mb-0">Data Invoice</h6>
         </div>
       </div>
-      </div>
+      </a>
     </div>
     </div>
+  </div>
 
-
-
-
-
-    {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+  {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
-      <div class="card-body p-3">
+    <div class="card-body p-3">
       <div class="row">
-        <div class="col-8">
+      <div class="col-8">
         <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
-          <h5 class="font-weight-bolder mb-0">
+        <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+        <h5 class="font-weight-bolder mb-0">
           $53,000
           <span class="text-success text-sm font-weight-bolder">+55%</span>
-          </h5>
+        </h5>
         </div>
-        </div>
-        <div class="col-4 text-end">
+      </div>
+      <div class="col-4 text-end">
         <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
-        </div>
+        <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
         </div>
       </div>
       </div>
     </div>
     </div>
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
-      <div class="card-body p-3">
+    <div class="card-body p-3">
       <div class="row">
-        <div class="col-8">
+      <div class="col-8">
         <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
-          <h5 class="font-weight-bolder mb-0">
+        <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+        <h5 class="font-weight-bolder mb-0">
           2,300
           <span class="text-success text-sm font-weight-bolder">+3%</span>
-          </h5>
+        </h5>
         </div>
-        </div>
-        <div class="col-4 text-end">
+      </div>
+      <div class="col-4 text-end">
         <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
-        </div>
+        <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
         </div>
       </div>
       </div>
     </div>
     </div>
-    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+  </div>
+  <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
-      <div class="card-body p-3">
+    <div class="card-body p-3">
       <div class="row">
-        <div class="col-8">
+      <div class="col-8">
         <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">New Clients</p>
-          <h5 class="font-weight-bolder mb-0">
+        <p class="text-sm mb-0 text-capitalize font-weight-bold">New Clients</p>
+        <h5 class="font-weight-bolder mb-0">
           +3,462
           <span class="text-danger text-sm font-weight-bolder">-2%</span>
-          </h5>
+        </h5>
         </div>
-        </div>
-        <div class="col-4 text-end">
+      </div>
+      <div class="col-4 text-end">
         <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-        </div>
+        <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
         </div>
       </div>
       </div>
     </div>
     </div>
-    <div class="col-xl-3 col-sm-6">
+  </div>
+  <div class="col-xl-3 col-sm-6">
     <div class="card">
-      <div class="card-body p-3">
+    <div class="card-body p-3">
       <div class="row">
-        <div class="col-8">
+      <div class="col-8">
         <div class="numbers">
-          <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
-          <h5 class="font-weight-bolder mb-0">
+        <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
+        <h5 class="font-weight-bolder mb-0">
           $103,430
           <span class="text-success text-sm font-weight-bolder">+5%</span>
-          </h5>
+        </h5>
         </div>
-        </div>
-        <div class="col-4 text-end">
+      </div>
+      <div class="col-4 text-end">
         <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-          <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
-        </div>
+        <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
         </div>
       </div>
       </div>
     </div>
-    </div> --}}
+    </div>
+  </div> --}}
   </div>
   {{-- <div class="row mt-4">
     <div class="col-lg-7 mb-lg-0 mb-4">
