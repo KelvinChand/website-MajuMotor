@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('penjualans', function (Blueprint $table) {
             $table->uuid('idPenjualan')
             ->primary();
-            $table->double('total_harga');
+            $table->double('totalHarga');
             $table->string('status',10)->default('pending');
             $table->softDeletes();
             $table->timestamps();

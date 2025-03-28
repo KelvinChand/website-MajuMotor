@@ -24,12 +24,10 @@ class SessionsController extends Controller
 
         if(Auth::attempt(credentials: $attributes))
         {
-            Log::info("Masuk");
             session()->regenerate();
             return redirect(to: 'dashboard')->with(key: ['success'=>'You are logged in.']);
         }
         else{
-            Log::info("Gagal");
             return back()->withErrors(provider: ['username'=>'Username or password invalid.']);
         }
     }

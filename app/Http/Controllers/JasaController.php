@@ -9,52 +9,39 @@ class JasaController extends Controller
 {
     public function index()
     {
-        $Jasa = Jasa::all();
-        return view('/', compact('Jasa'));
+        $Jasa = Jasa::with('produk')->get();
+        return response()->json([
+            'message' => 'Data Jasa berhasil diambil',
+            'data' => $Jasa
+        ], 200);
     }
 
-    public function store($idProduk, $deskripsiKeluhan)
-    {
-        $attributes = request()->validate([
-            'deskripsiKeluhan' => $deskripsiKeluhan,
-            'idProduk' => $idProduk,
-        ]);
+    // public function update(Request $request, $idJasa)
+    // {
+    //     $Jasa = Jasa::find($idJasa);
 
-        $Jasa = Jasa::create($attributes);
+    //     if (!$Jasa) {
+    //         return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
+    //     }
 
-        if (!$Jasa) {
-            return response()->json(['message' => 'Gagal Menyimpan Data Jasa'], 500);
-        }
+    //     $attributes = $request->validate([
+    //         'deskripsiKeluhan' => ['string'],
+    //     ]);
 
-        return response()->json(['message' => 'Data Jasa Berhasil Dibuat', 'Jasa' => $Jasa], 201);
-    }
+    //     $Jasa->update($attributes);
 
-    public function update(Request $request, $id)
-    {
-        $Jasa = Jasa::find($id);
+    //     return response()->json(['message' => 'Data Jasa Berhasil Diperbarui', 'Jasa' => $Jasa], 200);
+    // }
 
-        if (!$Jasa) {
-            return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
-        }
+    // public function destroy($idJasa)
+    // {
+    //     $Jasa = Jasa::find($idJasa);
 
-        $attributes = $request->validate([
-            'deskripsiKeluhan' => ['string'],
-        ]);
+    //     if (!$Jasa) {
+    //         return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
+    //     }
 
-        $Jasa->update($attributes);
-
-        return response()->json(['message' => 'Data Jasa Berhasil Diperbarui', 'Jasa' => $Jasa], 200);
-    }
-
-    public function destroy($id)
-    {
-        $Jasa = Jasa::find($id);
-
-        if (!$Jasa) {
-            return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
-        }
-
-        $Jasa->delete();
-        return response()->json(['message' => 'Data Jasa Berhasil Dihapus'], 200);
-    }
+    //     $Jasa->delete();
+    //     return response()->json(['message' => 'Data Jasa Berhasil Dihapus'], 200);
+    // }
 }

@@ -13,11 +13,17 @@ class PenjualanController extends Controller
     public function index()
     {
         $Penjualan = Penjualan::all();
-        return view('/', compact('Penjualan'));
+        //Cari PenjualanProduk berdasarkan id Penjualan di table PenjualanProduk
+        return response()->json([
+            'message' => 'Data Penjualan berhasil diambil',
+            'data' => $Penjualan
+        ], 200);
     }
+
     public function show($idPenjualan)
     {
         $penjualan = Penjualan::find($idPenjualan);
+        //Cari PenjualanProduk berdasarkan id Penjualan di table PenjualanProduk
 
         if (!$penjualan) {
             return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
@@ -31,27 +37,23 @@ class PenjualanController extends Controller
 
     public function store(Request $request)
     {
-        $attributes = request()->validate(rules: [
+        $attributes = $request->validate([
             'data' => ['required', 'array'],
             'data.*.idProduk' => ['required', 'string'],
             'data.*.kuantitas' => ['required', 'integer', 'min:1'],
-            'status' => ['required', 'string', 'in:pending'],
-            'totalHarga' => ['sometimes', 'numeric', 'in:0'],
         ]);
 
         DB::beginTransaction();
         try {
-
-            $totalHarga = $attributes['totalHarga'] ??= 0;
-            $penjualan = Penjualan::create(attributes: [
-                'status' => $attributes['status'],
+            $status = 'pending';
+            $totalHarga = 0;
+            $penjualan = Penjualan::create([
+                'status' => $status,
                 'totalHarga' => $totalHarga,
             ]);
 
-
-
             foreach ($attributes['data'] as $item) {
-                $produk = Produk::findOrFail(id: $item['idProduk']);
+                $produk = Produk::findOrFail($item['idProduk']);
                 $subTotal = $produk->harga * $item['kuantitas'];
                 $totalHarga += $subTotal;
                 PenjualanProduk::create([
@@ -72,6 +74,30 @@ class PenjualanController extends Controller
             DB::rollback();
             return response()->json([
                 'message' => 'Gagal Menyimpan Data Penjualan',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy($idPenjualan)
+    {
+        $penjualan = Penjualan::find($idPenjualan);
+        //Hapus PenjualanProduk dulu baru Penjualan
+        if (!$penjualan) {
+            return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
+        }
+
+        DB::beginTransaction();
+        try {
+            PenjualanProduk::where('idPenjualan', $idPenjualan)->delete();
+            $penjualan->delete();
+            DB::commit();
+
+            return response()->json(['message' => 'Data Penjualan Berhasil Dihapus'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'message' => 'Gagal Menghapus Data Penjualan',
                 'error' => $e->getMessage()
             ], 500);
         }
