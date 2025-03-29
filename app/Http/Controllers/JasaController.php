@@ -34,28 +34,25 @@ class JasaController extends Controller
         DB::beginTransaction();
 
         try {
-            // Simpan ke tabel produk
             $produk = Produk::create([
                 'nama' => $attributes['nama'],
                 'harga' => $attributes['harga'],
             ]);
-            
-            // Pastikan produk berhasil disimpan dan memiliki ID
+
             if (!$produk || !$produk->idProduk) {
                 throw new \Exception('Gagal menyimpan data produk');
             }
 
-            // Simpan ke tabel barang dengan idProduk yang valid
             $jasa = Jasa::create([
                 'idProduk' => $produk->idProduk,
                 'deskripsiKeluhan' => $attributes['deskripsiKeluhan'] ?? null,
             ]);
 
             DB::commit();
-            return redirect('jasa')->with("Berhasil Menyimpan Data");
+            return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil disimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Gagal Menyimpan Data', 'error' => $e->getMessage()], 500);
+            return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal disimpan.');
         }
     }
 
@@ -64,7 +61,7 @@ class JasaController extends Controller
         $Jasa = Jasa::find($idJasa);
 
         if (!$Jasa) {
-            return response()->json(['message' => 'Jasa tidak ditemukan'], 404);
+            return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa tidak ditemukan.');
         }
 
         $attributes = $request->validate([
@@ -83,10 +80,10 @@ class JasaController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->back();
+            return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->back();
+            return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal diperbarui.');
         }
     }
 
@@ -95,10 +92,10 @@ class JasaController extends Controller
         $Jasa = Jasa::find($idJasa);
 
         if (!$Jasa) {
-            return response()->json(['message' => 'Jasa Tidak Ditemukan'], 404);
+            return redirect()->route(route: 'jasa.indexWeb')->with('error', 'Data jasa tidak ditemukan.');
         }
 
         $Jasa->delete();
-        return response()->json(['message' => 'Data Jasa Berhasil Dihapus'], 200);
+        return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil dihapus.');
     }
 }

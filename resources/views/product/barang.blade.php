@@ -5,15 +5,41 @@
     <div>
         <div class="row">
             <div class="col-12">
+
+
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show mx-4" role="alert">
+                        <span class="text-xs text-white">{{ session('success') }}</span>
+                        <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                            data-bs-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
+                        <span class="text-xs text-white">{{ session('error') }}</span>
+                        <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                            data-bs-dismiss="alert" aria-label="Close">
+                            <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+
+
                 <div class="card mb-4 mx-4">
                     <div class="card-header pb-0 mb-4">
                         <div class="d-flex flex-row justify-content-between">
                             <div>
                                 <h6 class="mb-0">Daftar Barang</h6>
                             </div>
-                            <a href="#" class="btn bg-gradient-primary btn-sm mb-0 me-2" type="button" data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
-                                <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 5v14M5 12h14" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <a href="#" class="btn bg-gradient-primary btn-sm mb-0 me-2" type="button"
+                                data-bs-toggle="modal" data-bs-target="#modalTambahBarang">
+                                <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5v14M5 12h14" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
                                 </svg> Tambah Barang
                             </a>
 
@@ -77,30 +103,37 @@
                                                 </p>
                                             </td>
                                             <td class="text-start">
-                                                <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
-                                                    data-id="{{ $item->produk->barang->idBarang }}"
-                                                    data-nama="{{ $item->produk->nama }}"
-                                                    data-harga="{{ $item->produk->harga }}"
-                                                    data-jenis="{{ $item->jenis }}"
-                                                    data-stok="{{ $item->stok }}"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#modalEditBarang">
-                                                    <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M16.862 3.487a1.5 1.5 0 0 1 2.121 0l1.53 1.53a1.5 1.5 0 0 1 0 2.12l-12.9 12.901-4.246.707a1 1 0 0 1-1.164-1.164l.707-4.246 12.952-12.95zM4.79 17.896l2.086.347 11.47-11.471-2.433-2.432L4.79 17.896zm-1.151 1.384l-.632 3.79 3.79-.632-3.158-3.158z"
-                                                            fill="#FFFFFF" />
-                                                    </svg> Edit
-                                                </a>
-                                                <form action="{{ route('barang.delete', $item->produk->barang->idBarang) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn bg-gradient-danger btn-sm mb-0 btn-hapus" data-id="{{ $item->produk->barang->idBarang }}">
+                                                <div class="d-flex align-items-center gap-2">
+                                                    <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
+                                                        data-id="{{ $item->produk->barang->idBarang }}"
+                                                        data-nama="{{ $item->produk->nama }}"
+                                                        data-harga="{{ $item->produk->harga }}" data-jenis="{{ $item->jenis }}"
+                                                        data-stok="{{ $item->stok }}" data-bs-toggle="modal"
+                                                        data-bs-target="#modalEditBarang">
                                                         <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
                                                             xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
-                                                                stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                        </svg> Hapus
-                                                    </button>
-                                                </form>
+                                                            <path
+                                                                d="M16.862 3.487a1.5 1.5 0 0 1 2.121 0l1.53 1.53a1.5 1.5 0 0 1 0 2.12l-12.9 12.901-4.246.707a1 1 0 0 1-1.164-1.164l.707-4.246 12.952-12.95zM4.79 17.896l2.086.347 11.47-11.471-2.433-2.432L4.79 17.896zm-1.151 1.384l-.632 3.79 3.79-.632-3.158-3.158z"
+                                                                fill="#FFFFFF" />
+                                                        </svg> Edit
+                                                    </a>
+                                                    <form action="{{ route('barang.delete', $item->produk->barang->idBarang) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn bg-gradient-danger btn-sm mb-0 btn-hapus"
+                                                            data-id="{{ $item->produk->barang->idBarang }}">
+                                                            <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
+                                                                xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
+                                                                    stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
+                                                                    stroke-linejoin="round" />
+                                                            </svg> Hapus
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </td>
                                         </tr>
                                     @empty
@@ -113,8 +146,6 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
-
-
                             </table>
                         </div>
                     </div>
@@ -136,7 +167,7 @@
                     @method('PUT')
                     <div class="modal-body">
                         <input type="hidden" id="editIdBarang" name="idBarang">
-                        
+
                         <div class="mb-3">
                             <label for="editNama" class="form-label">Nama Barang</label>
                             <input type="text" class="form-control" id="editNama" name="nama" required>
@@ -201,14 +232,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.btn-edit').forEach(button => {
@@ -218,23 +241,24 @@
                     let harga = this.getAttribute('data-harga');
                     let jenis = this.getAttribute('data-jenis');
                     let stok = this.getAttribute('data-stok');
-    
+
                     document.getElementById('editIdBarang').value = id;
                     document.getElementById('editNama').value = nama;
                     document.getElementById('editHarga').value = harga;
                     document.getElementById('editJenis').value = jenis;
                     document.getElementById('editStok').value = stok;
-    
+
                     // Set form action dynamically
                     document.getElementById('formEditBarang').action = `/barang/${id}/update`;
                 });
             });
         });
-    </script>    
+    </script>
 
 
-    {{-- <script>
-        document.getElementById('tipe').addEventListener('change', function() {
+    {{--
+    <script>
+        document.getElementById('tipe').addEventListener('change', function () {
             if (this.value === 'barang') {
                 document.getElementById('fieldJenis').style.display = 'block';
                 document.getElementById('fieldStok').style.display = 'block';

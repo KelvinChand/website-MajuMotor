@@ -6,6 +6,7 @@ use App\Models\Produk;
 use App\Models\Barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class BarangController extends Controller
 {
@@ -36,18 +37,15 @@ class BarangController extends Controller
         DB::beginTransaction();
 
         try {
-            // Simpan ke tabel produk
             $produk = Produk::create([
                 'nama' => $attributes['nama'],
                 'harga' => $attributes['harga'],
             ]);
-            
-            // Pastikan produk berhasil disimpan dan memiliki ID
+
             if (!$produk || !$produk->idProduk) {
                 throw new \Exception('Gagal menyimpan data produk');
             }
 
-            // Simpan ke tabel barang dengan idProduk yang valid
             $barang = Barang::create([
                 'idProduk' => $produk->idProduk,
                 'jenis' => $attributes['jenis'] ?? null,
@@ -55,10 +53,10 @@ class BarangController extends Controller
             ]);
 
             DB::commit();
-            return redirect('barang')->with("Berhasil Menyimpan Data");
+            return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil disimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['message' => 'Gagal Menyimpan Data', 'error' => $e->getMessage()], 500);
+            return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal disimpan.');
         }
     }
 
@@ -67,16 +65,35 @@ class BarangController extends Controller
         $Barang = Barang::find($idBarang);
 
         if (!$Barang) {
-            return response()->json(['message' => 'Barang tidak ditemukan'], 404);
+            return redirect()->route('barang.indexWeb')->with('error', 'Data barang tidak ditemukan.');
         }
 
         $attributes = $request->validate([
+            'nama' => ['string'],
+            'harga' => ['numeric'],
             'jenis' => ['string', 'max:50'],
             'stok' => ['integer'],
         ]);
 
-        $Barang->update($attributes);
-        return redirect('barang')->with("Berhasil Mengupdate Data");
+        DB::beginTransaction();
+        try {
+            $Barang->update(['jenis' => $attributes['jenis']]);
+            $Barang->produk->update([
+                'nama' => $attributes['nama'],
+                'harga' => $attributes['harga'],
+            ]);
+
+            if (isset($attributes['stok'])) {
+                $Barang->stok = $attributes['stok'];
+                $Barang->save();
+            }
+
+            DB::commit();
+            return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal diperbarui.');
+        }
     }
 
     public function destroy($idBarang)
@@ -84,10 +101,10 @@ class BarangController extends Controller
         $Barang = Barang::find($idBarang);
 
         if (!$Barang) {
-            return response()->json(['message' => 'Barang tidak ditemukan'], 404);
+            return redirect()->route('barang.indexWeb')->with('error', 'Data barang tidak ditemukan.');
         }
 
         $Barang->delete();
-        return redirect('barang')->with("Berhasil Menghapus Data");
+        return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil dihapus.');
     }
 }
