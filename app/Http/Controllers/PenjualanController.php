@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
 use App\Models\Produk;
+use App\Models\Barang;
 use App\Models\PenjualanProduk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -12,26 +13,10 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        $Penjualan = Penjualan::all();
-        //Cari PenjualanProduk berdasarkan id Penjualan di table PenjualanProduk
+        $Penjualan = Penjualan::with('penjualanProduk.produk')->get();
         return response()->json([
             'message' => 'Data Penjualan berhasil diambil',
             'data' => $Penjualan
-        ], 200);
-    }
-
-    public function show($idPenjualan)
-    {
-        $penjualan = Penjualan::find($idPenjualan);
-        //Cari PenjualanProduk berdasarkan id Penjualan di table PenjualanProduk
-
-        if (!$penjualan) {
-            return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
-        }
-
-        return response()->json([
-            'message' => 'Detail Data Penjualan',
-            'Penjualan' => $penjualan
         ], 200);
     }
 
@@ -56,6 +41,19 @@ class PenjualanController extends Controller
                 $produk = Produk::findOrFail($item['idProduk']);
                 $subTotal = $produk->harga * $item['kuantitas'];
                 $totalHarga += $subTotal;
+                $barang = Barang::where('idProduk',$item['idProduk'])->first();
+                if ($barang) {
+                    if ($barang->stok < $item['kuantitas']) {
+                        DB::rollBack();
+                        return response()->json([
+                            'message' => 'Stok tidak mencukupi untuk produk ' . $produk->nama,
+                        ], 400);
+                    }
+                    $barang->decrement('stok', $item['kuantitas']);
+                } else {
+                    continue;
+                }
+
                 PenjualanProduk::create([
                     'idPenjualan' => $penjualan->idPenjualan,
                     'idProduk' => $item['idProduk'],
@@ -63,6 +61,7 @@ class PenjualanController extends Controller
                     'kuantitas' => $item['kuantitas'],
                 ]);
             }
+
             $penjualan->update(['totalHarga' => $totalHarga]);
 
             DB::commit();
@@ -71,7 +70,7 @@ class PenjualanController extends Controller
                 'Penjualan' => $penjualan
             ], 201);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
             return response()->json([
                 'message' => 'Gagal Menyimpan Data Penjualan',
                 'error' => $e->getMessage()
@@ -79,10 +78,30 @@ class PenjualanController extends Controller
         }
     }
 
+
+    public function updateStatus(Request $request, $idPenjualan)
+    {
+        $penjualan = Penjualan::find($idPenjualan);
+
+        if (!$penjualan) {
+            return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
+        }
+
+        $attributes = $request->validate([
+            'status' => ['required', 'in:berhasil,gagal']
+        ]);
+
+        $penjualan->update(['status' => $attributes['status']]);
+
+        return response()->json([
+            'message' => 'Status Penjualan Berhasil Diperbarui',
+            'Penjualan' => $penjualan
+        ], 200);
+    }
+
     public function destroy($idPenjualan)
     {
         $penjualan = Penjualan::find($idPenjualan);
-        //Hapus PenjualanProduk dulu baru Penjualan
         if (!$penjualan) {
             return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
         }
@@ -91,15 +110,18 @@ class PenjualanController extends Controller
         try {
             PenjualanProduk::where('idPenjualan', $idPenjualan)->delete();
             $penjualan->delete();
+
             DB::commit();
 
             return response()->json(['message' => 'Data Penjualan Berhasil Dihapus'], 200);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollBack();
+
             return response()->json([
                 'message' => 'Gagal Menghapus Data Penjualan',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 }

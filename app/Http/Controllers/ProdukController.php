@@ -10,6 +10,16 @@ use Illuminate\Support\Facades\DB;
 
 class ProdukController extends Controller
 {
+
+    public function index()
+    {
+        $Produk = Produk::with('barang','jasa')->get();
+        return response()->json([
+            'message' => 'Data Produk berhasil diambil',
+            'data' => $Produk
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         $attributes = $request->validate([
@@ -59,7 +69,6 @@ class ProdukController extends Controller
     public function update(Request $request, $idProduk)
     {
         $Produk = Produk::find($idProduk);
-        //Update Barang atau Jasa terlebih dahulu
 
         if (!$Produk) {
             return response()->json(['message' => 'Produk Tidak Ditemukan'], 404);
@@ -77,14 +86,32 @@ class ProdukController extends Controller
 
     public function destroy($idProduk)
     {
-        $Produk = Produk::find($idProduk);
-        //Hapus Barang atau Jasa terlebih dahulu
+        $produk = Produk::find($idProduk);
 
-        if (!$Produk) {
+
+        if (!$produk) {
             return response()->json(['message' => 'Produk Tidak Ditemukan'], 404);
         }
 
-        $Produk->delete();
-        return response()->json(['message' => 'Data Produk Berhasil Dihapus'], 200);
+        DB::beginTransaction();
+        try {
+
+            Barang::where('idProduk', $idProduk)->delete();
+            Jasa::where('idProduk', $idProduk)->delete();
+
+            $produk->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Data Produk Berhasil Dihapus'], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'message' => 'Gagal Menghapus Data Produk',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 }

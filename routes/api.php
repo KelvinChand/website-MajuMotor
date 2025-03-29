@@ -23,10 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::prefix('invoice')->group(function () {
-    Route::get('/', [InvoiceController::class, 'index']); // Pending
-});
-
 Route::prefix('barang')->group(function () {
     Route::get('/', [BarangController::class, 'index']); // OK
 });
@@ -35,15 +31,20 @@ Route::prefix('jasa')->group(function () {
     Route::get('/', [JasaController::class, 'index']); // OK
 });
 
+Route::prefix('invoice')->group(function () {
+    Route::get('/', [InvoiceController::class, 'index']); // OK
+});
+
 Route::prefix('penjualan')->group(function () {
-    Route::get('/', [PenjualanController::class, 'index']); // Pending
-    Route::get('/{idPenjualan}', [PenjualanController::class, 'show']); // Pending
+    Route::get('/', [PenjualanController::class, 'index']); // OK
     Route::post('/', [PenjualanController::class, 'store']); // OK
-    Route::delete('/{idPenjualan}', [PenjualanController::class, 'destroy']); // Pending
+    Route::put('/{idPenjualan}', [PenjualanController::class, 'updateStatus']); // OK
+    Route::delete('/{idPenjualan}', [PenjualanController::class, 'destroy']); // OK
 });
 
 Route::prefix('produk')->group(function () {
+    Route::get('/', [ProdukController::class, 'index']); // OK
     Route::post('/', [ProdukController::class, 'store']); // OK
     Route::put('/{idProduk}', [ProdukController::class, 'update']); // OK
-    Route::delete('/{idProduk}', [ProdukController::class, 'destroy']); // Pending
+    Route::delete('/{idProduk}', [ProdukController::class, 'destroy']); //OK
 });
