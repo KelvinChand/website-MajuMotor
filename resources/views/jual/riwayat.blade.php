@@ -6,13 +6,6 @@
     <div class="row">
         <div class="col-12">
             <div class="card mb-4 mx-4">
-                <div class="card-header pb-0">
-                    <div class="d-flex flex-row justify-content-between">
-                        <div>
-                            <h5 class="mb-0">Invoice</h5>
-                        </div>
-                    </div>
-                </div>
                 <div class="card-body px-0 pt-0 pb-2">
                     <div class="table-responsive p-0">
                         <table class="table align-items-center mb-0">
@@ -40,6 +33,10 @@
                                     <th
                                         class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Total Harga
+                                    </th>
+                                    <th
+                                        class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Status
                                     </th>
                                 </tr>
 
@@ -77,10 +74,23 @@
                                             <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
                                                 <p class="text-xs font-weight-bold mb-0">Rp. {{ number_format($penjualanProduk->jumlah, 0, ',', '.') }}</p>
                                             </td>
-
+                            
                                             @if ($i == 0)
                                                 <td class="text-start" rowspan="{{ $totalRows }}">
                                                     <p class="text-xs font-weight-bold mb-0">Rp. {{ number_format($item->totalHarga, 0, ',', '.') }}</p>
+                                                </td>
+                                                <td class="text-start" rowspan="{{ $totalRows }}">
+                                                    @if ($item->status == 'pending')
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                    @elseif ($item->status == 'perbaikan')
+                                                        <span class="badge bg-primary">Sedang Diperbaiki</span>
+                                                    @elseif ($item->status == 'selesai')
+                                                        <span class="badge bg-success">Selesai</span>
+                                                    @elseif ($item->status == 'gagal')
+                                                        <span class="badge bg-danger">Gagal</span>
+                                                    @else
+                                                        <span class="badge bg-secondary">Unknown</span>
+                                                    @endif
                                                 </td>
                                             @endif
                                         </tr>
@@ -88,7 +98,7 @@
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center text-muted">
-                                            <p class="text-xs font-weight-bold mb-0">Tidak ada data invoice yang tersedia.</p>
+                                            <p class="text-xs font-weight-bold mb-0">Tidak ada riwayat penjualan yang tersedia.</p>
                                         </td>
                                     </tr>
                                 @endforelse

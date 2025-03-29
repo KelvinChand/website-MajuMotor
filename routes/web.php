@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BarangController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\JasaController;
@@ -71,12 +73,9 @@ Route::group(['middleware' => 'auth'], function () {
 	// New Route
 	Route::get('barang', [BarangController::class, 'indexWeb'])->name('barang.indexWeb');
 	Route::get('jasa', [JasaController::class, 'indexWeb'])->name('jasa.indexWeb');
-	Route::get('penjualan', function () {
-		return view('jual/penjualan');
-	})->name('penjualan');
-	Route::get('invoice', function () {
-		return view('jual/invoice');
-	})->name('invoice');
+	Route::get('penjualan', [PenjualanController::class, 'index'])->name('penjualan');
+	Route::get('invoice', [InvoiceController::class, 'index'])->name('invoice');
+	Route::get('riwayat', [InvoiceController::class, 'indexRiwayat'])->name('riwayat');
 });
 
 Route::group(['middleware' => 'guest'], function () {

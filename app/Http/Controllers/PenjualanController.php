@@ -13,11 +13,11 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        $Penjualan = Penjualan::with('penjualanProduk.produk')->get();
-        return response()->json([
-            'message' => 'Data Penjualan berhasil diambil',
-            'data' => $Penjualan
-        ], 200);
+        $Penjualan = Penjualan::with('penjualanProduk.produk')
+            ->whereNotIn('status', ['selesai', 'gagal'])
+            ->get();
+
+        return view('jual.penjualan', compact('Penjualan'));
     }
 
     public function store(Request $request)

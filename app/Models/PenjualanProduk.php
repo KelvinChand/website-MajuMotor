@@ -46,8 +46,8 @@ class PenjualanProduk extends Model
     /**
      * Relasi ke model Produk
      */
-    public function produk(): HasMany
+    public function produk(): BelongsTo
     {
-        return $this->hasMany(related: Produk::class,  foreignKey: 'idProduk', localKey: 'idProduk');
+        return $this->belongsTo(Produk::class, 'idProduk', 'idProduk');
     }
 }
