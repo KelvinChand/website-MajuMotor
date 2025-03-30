@@ -73,7 +73,12 @@ Route::group(['middleware' => 'auth'], function () {
 	// New Route
 	Route::get('barang', [BarangController::class, 'indexWeb'])->name('barang.indexWeb');
 	Route::get('jasa', [JasaController::class, 'indexWeb'])->name('jasa.indexWeb');
-	Route::get('penjualan', [PenjualanController::class, 'index'])->name('penjualan');
+
+	Route::prefix('penjualan')->group(function () {
+		Route::get('/', [PenjualanController::class, 'index'])->name('penjualan.index');
+		Route::post('/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+		Route::delete('/{idPenjualan}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
+	});
 	Route::get('invoice', [InvoiceController::class, 'index'])->name('invoice');
 	Route::get('riwayat', [InvoiceController::class, 'indexRiwayat'])->name('riwayat');
 });

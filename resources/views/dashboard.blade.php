@@ -2,77 +2,78 @@
 
 @section('content')
 
-<div class="container-fluid">
-  <div class="row g-2 d-flex justify-content-between">
-      <div class="col-xl-3 col-md-6 col-sm-12">
-          <a class="nav-link {{ (Request::is('barang') ? 'active' : '') }}" href="{{ url('barang') }}">
-              <div class="card text-center">
-                  <div class="card-body p-3">
-                      <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-                          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                          <i class="ni ni-box-2 text-white" style="font-size: 40px;" aria-hidden="true"></i>
-                      </div>
-                      <h6 class="font-weight-bolder mb-0">Data Barang</h6>
-                  </div>
-              </div>
-          </a>
-      </div>
-
-      <div class="col-xl-3 col-md-6 col-sm-12">
-          <a class="nav-link {{ (Request::is('jasa') ? 'active' : '') }}" href="{{ url('jasa') }}">
-              <div class="card text-center">
-                  <div class="card-body p-3">
-                      <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-                          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                          <i class="ni ni-briefcase-24 text-white" style="font-size: 40px;" aria-hidden="true"></i>
-                      </div>
-                      <h6 class="font-weight-bolder mb-0">Data Jasa</h6>
-                  </div>
-              </div>
-          </a>
-      </div>
-
-      <div class="col-xl-3 col-md-6 col-sm-12">
-          <a class="nav-link {{ (Request::is('penjualan') ? 'active' : '') }}" href="{{ url('penjualan') }}">
-              <div class="card text-center">
-                  <div class="card-body p-3">
-                      <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-                          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                          <i class="ni ni-cart text-white" style="font-size: 40px;" aria-hidden="true"></i>
-                      </div>
-                      <h6 class="font-weight-bolder mb-0">Data Penjualan</h6>
-                  </div>
-              </div>
-          </a>
-      </div>
-
-      <div class="col-xl-3 col-md-6 col-sm-12">
-          <a class="nav-link {{ (Request::is('invoice') ? 'active' : '') }}" href="{{ url('invoice') }}">
-              <div class="card text-center">
-                  <div class="card-body p-3">
-                      <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-                          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                          <i class="ni ni-single-copy-04 text-white" style="font-size: 40px;" aria-hidden="true"></i>
-                      </div>
-                      <h6 class="font-weight-bolder mb-0">Data Invoice</h6>
-                  </div>
-              </div>
-          </a>
-      </div>
-  </div>
-
-  <!-- ALERT NOTIFIKASI -->
-  @php
-    $penjualanBelumSelesai = \App\Models\Penjualan::whereIn('status', ['pending', 'perbaikan'])->count();
+  <div class="container-fluid">
+    <!-- ALERT NOTIFIKASI -->
+    @php
+      $penjualanBelumSelesai = \App\Models\Penjualan::whereIn('status', ['pending', 'perbaikan'])->count();
   @endphp
 
-  @if ($penjualanBelumSelesai > 0)
+    @if ($penjualanBelumSelesai > 0)
     <div class="alert alert-warning mt-4" role="alert">
-        <strong>Pemberitahuan!</strong> Ada <b>{{ $penjualanBelumSelesai }}</b> penjualan yang belum selesai. 
-        <a href="{{ url('penjualan') }}" class="alert-link">Cek sekarang</a>.
+    <strong>Pemberitahuan!</strong> <br /> Ada <b>{{ $penjualanBelumSelesai }}</b> penjualan yang belum selesai.
+    <a href="{{ url('penjualan') }}" class="alert-link">Cek sekarang</a>.
     </div>
   @endif
-</div>
+    <div class="row g-2 d-flex justify-content-between">
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('barang') ? 'active' : '') }}" href="{{ url('barang') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-box-2 text-white" style="font-size: 40px;" aria-hidden="true"></i>
+        </div>
+        <h6 class="font-weight-bolder mb-0">Data Barang</h6>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('jasa') ? 'active' : '') }}" href="{{ url('jasa') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-briefcase-24 text-white" style="font-size: 40px;" aria-hidden="true"></i>
+        </div>
+        <h6 class="font-weight-bolder mb-0">Data Jasa</h6>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('penjualan') ? 'active' : '') }}" href="{{ url('penjualan') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-cart text-white" style="font-size: 40px;" aria-hidden="true"></i>
+        </div>
+        <h6 class="font-weight-bolder mb-0">Data Penjualan</h6>
+        </div>
+      </div>
+      </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-12">
+      <a class="nav-link {{ (Request::is('invoice') ? 'active' : '') }}" href="{{ url('invoice') }}">
+      <div class="card text-center">
+        <div class="card-body p-3">
+        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+          <i class="ni ni-single-copy-04 text-white" style="font-size: 40px;" aria-hidden="true"></i>
+        </div>
+        <h6 class="font-weight-bolder mb-0">Data Invoice</h6>
+        </div>
+      </div>
+      </a>
+    </div>
+    </div>
+
+
+  </div>
 
 
   {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">

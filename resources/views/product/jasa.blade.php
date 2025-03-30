@@ -141,6 +141,7 @@
                                     @endforelse
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
@@ -238,5 +239,21 @@
             });
         });
     </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const produkSelect = document.getElementById("produk_id");
+            const hargaInput = document.getElementById("harga_barang");
+
+            produkSelect.addEventListener("change", function () {
+                const selectedOption = this.options[this.selectedIndex];
+                const harga = selectedOption.getAttribute("data-harga");
+
+                // Mengisi input harga dengan format rupiah
+                hargaInput.value = harga ? `Rp. ${parseInt(harga).toLocaleString("id-ID")}` : "";
+            });
+        });
+    </script>
+
 
 @endsection

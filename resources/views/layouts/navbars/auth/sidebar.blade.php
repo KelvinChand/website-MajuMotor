@@ -154,9 +154,6 @@
           <span class="nav-link-text ms-1">Invoice</span>
         </a>
       </li>
-      <li class="nav-item mt-4">
-        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Tools</h6>
-      </li>
       <li class="nav-item">
         <a class="nav-link {{ (Request::is('riwayat') ? 'active' : '') }}" href="{{ url('riwayat') }}">
           <div
@@ -183,6 +180,10 @@
           <span class="nav-link-text ms-1">Riwayat</span>
         </a>
       </li>
+      {{-- <li class="nav-item mt-4">
+        <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Tools</h6>
+      </li> --}}
+
       {{-- <li class="nav-item">
         <a class="nav-link {{ (Request::is('tables') ? 'active' : '') }}" href="{{ url('tables') }}">
           <div

@@ -87,7 +87,7 @@
                                     @endforeach
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">
+                                        <td colspan="6" class="text-center text-muted">
                                             <p class="text-xs font-weight-bold mb-0">Tidak ada data invoice yang tersedia.</p>
                                         </td>
                                     </tr>
