@@ -210,7 +210,6 @@
                         data-bs-dismiss="alert" aria-label="Close">
                         <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
                     </button>
-                    {{-- <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> --}}
                 </div>
                 <form id="formDataPenjualan" action="{{ route('penjualan.store') }}" method="POST">
                     @csrf
@@ -261,7 +260,6 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Aksi
                                     </th>
-
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -383,39 +381,39 @@
                 let row = document.createElement("tr");
 
                 row.innerHTML = `
-                                                                                        <td class="text-center" style="min-width: 50px">
-                                                                                            <p class="text-xs font-weight-bold mb-0" style="min-width: 50px">
-                                                                                                ${tabelBody.children.length + 1}
-                                                                                            </p>
-                                                                                        </td>
-                                                                                        <td class="text-start" style="min-width: 200px">
-                                                                                            <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                ${nama}
-                                                                                            </p>
-                                                                                        </td>
-                                                                                        <td class="text-start" style="min-width: 200px">
-                                                                                            <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                Rp. ${harga.toLocaleString("id-ID")}
-                                                                                            </p>
-                                                                                        </td>
-                                                                                        <td class="text-start" style="min-width: 200px">
-                                                                                            <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                ${kuantitas}
-                                                                                            </p>
-                                                                                        </td>
-                                                                                        <td class="text-start" style="min-width: 200px">
-                                                                                            <p class="text-xs font-weight-bold mb-0 harga-total" style="min-width: 200px" data-harga-total="${hargaQuantity}">
-                                                                                                Rp. ${hargaQuantity.toLocaleString("id-ID")}
-                                                                                            </p>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <button type="button" class="btn bg-gradient-danger btn-sm mb-0 btn-hapus" onclick="hapusData(this, '${tipe}', '${idProduk}', ${hargaQuantity})">
-                                                                                                    <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                                        <path d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                                                    </svg> Hapus
-                                                                                            </button>
-                                                                                        </td>
-                                                                                    `;
+                                                                                                                                                                                <td class="text-center" style="min-width: 50px">
+                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 50px">
+                                                                                                                                                                                        ${tabelBody.children.length + 1}
+                                                                                                                                                                                    </p>
+                                                                                                                                                                                </td>
+                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                        ${nama}
+                                                                                                                                                                                    </p>
+                                                                                                                                                                                </td>
+                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                        Rp. ${harga.toLocaleString("id-ID")}
+                                                                                                                                                                                    </p>
+                                                                                                                                                                                </td>
+                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                        ${kuantitas}
+                                                                                                                                                                                    </p>
+                                                                                                                                                                                </td>
+                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0 harga-total" style="min-width: 200px" data-harga-total="${hargaQuantity}">
+                                                                                                                                                                                        Rp. ${hargaQuantity.toLocaleString("id-ID")}
+                                                                                                                                                                                    </p>
+                                                                                                                                                                                </td>
+                                                                                                                                                                                <td>
+                                                                                                                                                                                    <button type="button" class="btn bg-gradient-danger btn-sm mb-0 btn-hapus" onclick="hapusData(this, '${tipe}', '${idProduk}', ${hargaQuantity})">
+                                                                                                                                                                                            <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                                                                                                                <path d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                                                                                                                            </svg> Hapus
+                                                                                                                                                                                    </button>
+                                                                                                                                                                                </td>
+                                                                                                                                                                            `;
                 tabelBody.appendChild(row);
 
                 // Tambahkan ke array
@@ -464,27 +462,34 @@
 
                 console.log('Data sebelum dikirim', data)
 
-                fetch("{{ route('penjualan.store') }}", {
+                fetch("{{route('penjualan.store')}}", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     },
                     body: JSON.stringify({ data: data })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert("Data penjualan berhasil disimpan.");
-                            location.reload();
-                        } else {
-                            alert("Gagal menyimpan data penjualan: " + data.message);
+                }).then(response => response.text()) // Ubah ke .text() sementara
+                    .then(text => {
+                        console.log("Raw Response:", text); // Lihat respons mentah
+                        try {
+                            const data = JSON.parse(text);
+                            console.log('Parsed Response:', data);
+                            if (data.success) {
+                                alert("Data berhasil disimpan!");
+                                location.reload();
+                            } else {
+                                alert("Gagal menyimpan data.");
+                            }
+                        } catch (error) {
+                            console.error("Error parsing JSON:", error);
+                            alert("Terjadi kesalahan pada server.");
                         }
-                    })
-                    .catch(error => {
+                    }).catch(error => {
                         console.error("Error:", error);
                         alert("Terjadi kesalahan saat menyimpan data.");
                     });
+
             });
         });
 
