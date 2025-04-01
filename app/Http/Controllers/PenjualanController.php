@@ -19,11 +19,13 @@ class PenjualanController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // Pastikan $jasa dan $barang tetap didefinisikan meskipun $Penjualan kosong
         $jasa = Jasa::with('produk')->get();
         $barang = Barang::with('produk')->get();
 
         return view('jual.penjualan', compact('Penjualan', 'jasa', 'barang'));
     }
+
 
     public function store(Request $request)
     {
@@ -89,25 +91,49 @@ class PenjualanController extends Controller
         }
     }
 
+    // public function updateStatus(Request $request, $idPenjualan)
+    // {
+    //     $penjualan = Penjualan::find($idPenjualan);
+
+    //     if (!$penjualan) {
+    //         return redirect()->route('penjualan.index')->with('error', 'Data penjualan tidak ditemukan.');
+    //     }
+
+    //     $attributes = $request->validate([
+    //         'status' => ['required', 'in:pending,perbaikan,selesai,gagal']
+    //     ]);
+
+    //     try {
+    //         $penjualan->update(['status' => $attributes['status']]);
+    //         return redirect()->route('penjualan.index')->with('success', 'Status penjualan berhasil diperbarui.');
+    //     } catch (\Exception $e) {
+    //         return redirect()->route('penjualan.index')->with('error', 'Terjadi kesalahan saat memperbarui status penjualan: ' . $e->getMessage());
+    //     }
+    // }
+
     public function updateStatus(Request $request, $idPenjualan)
     {
         $penjualan = Penjualan::find($idPenjualan);
 
         if (!$penjualan) {
-            return response()->json(['message' => 'Data Penjualan Tidak Ditemukan'], 404);
+            return redirect()->route('penjualan.index')->with('error', 'Data penjualan tidak ditemukan.');
         }
 
+        // Debug: Cek data yang diterima dari form
+        // dd($request->all());
+
         $attributes = $request->validate([
-            'status' => ['required', 'in:berhasil,gagal']
+            'status' => ['required', 'in:pending,perbaikan,selesai,gagal']
         ]);
 
-        $penjualan->update(['status' => $attributes['status']]);
-
-        return response()->json([
-            'message' => 'Status Penjualan Berhasil Diperbarui',
-            'Penjualan' => $penjualan
-        ], 200);
+        try {
+            $penjualan->update(['status' => $attributes['status']]);
+            return redirect()->route('penjualan.index')->with('success', 'Status penjualan berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('penjualan.index')->with('error', 'Terjadi kesalahan saat memperbarui status penjualan: ' . $e->getMessage());
+        }
     }
+
 
     public function destroy($idPenjualan)
     {

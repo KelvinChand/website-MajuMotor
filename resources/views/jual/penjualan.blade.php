@@ -6,33 +6,33 @@
         <div class="row">
             <div class="col-12">
 
-                @if(session('success'))
-                    <div class="alert alert-success alert-dismissible fade show mx-4" role="alert">
-                        <span class="text-xs text-white">{{ session('success') }}</span>
-                        <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
-                            data-bs-dismiss="alert" aria-label="Close">
-                            <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif
+                <div id="alert-container">
+                    @if(session('success'))
+                        <div class="alert alert-success alert-dismissible fade show mx-4" role="alert">
+                            <span class="text-xs text-white">{{ session('success') }}</span>
+                            <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                                data-bs-dismiss="alert" aria-label="Close">
+                                <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
 
-                @if(session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
-                        <span class="text-xs text-white">{{ session('error') }}</span>
-                        <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
-                            data-bs-dismiss="alert" aria-label="Close">
-                            <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif
-
-
+                    @if(session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
+                            <span class="text-xs text-white">{{ session('error') }}</span>
+                            <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                                data-bs-dismiss="alert" aria-label="Close">
+                                <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                </div>
 
                 <div class="card mb-4 mx-4">
-                    <div class="card-header pb-0">
+                    <div class="card-header pb-4">
                         <div class="d-flex flex-row justify-content-between">
                             <div>
-                                <h5 class="mb-0">Penjualan</h5>
+                                <h6 class="mb-0">Penjualan</h6>
                             </div>
                             <a href="#" class="btn bg-gradient-primary btn-sm mb-0 me-2" type="button"
                                 data-bs-toggle="modal" data-bs-target="#modalTambahPenjualan">
@@ -129,7 +129,27 @@
                                                                                                                                     {{ number_format($item->totalHarga ?? 0, 0, ',', '.') }}
                                                                                                                                 </p>
                                                                                                                             </td>
-                                                                                                                            <td class="text-start" rowspan="{{ $totalRows }}">
+                                                                                                                            {{-- <td class="text-start" rowspan="{{ $totalRows }}">
+                                                                                                                                @php
+                                                                                                                                $statusBadge = [
+                                                                                                                                'pending' => 'bg-warning text-dark',
+                                                                                                                                'perbaikan' => 'bg-primary',
+                                                                                                                                'selesai' => 'bg-success',
+                                                                                                                                'gagal' => 'bg-danger',
+                                                                                                                                ];
+                                                                                                                                $statusText = [
+                                                                                                                                'pending' => 'Pending',
+                                                                                                                                'perbaikan' => 'Sedang Diperbaiki',
+                                                                                                                                'selesai' => 'Selesai',
+                                                                                                                                'gagal' => 'Gagal',
+                                                                                                                                ];
+                                                                                                                                $statusClass = $statusBadge[$item->status] ?? 'bg-secondary';
+                                                                                                                                $statusLabel = $statusText[$item->status] ?? 'Unknown';
+                                                                                                                                @endphp
+                                                                                                                                <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                                                                                                                            </td> --}}
+                                                                                                                            <td class="text-start" rowspan="{{ $totalRows }}" data-bs-toggle="modal"
+                                                                                                                                data-bs-target="#modalEditStatus">
                                                                                                                                 @php
                                                                                                                                     $statusBadge = [
                                                                                                                                         'pending' => 'bg-warning text-dark',
@@ -146,13 +166,16 @@
                                                                                                                                     $statusClass = $statusBadge[$item->status] ?? 'bg-secondary';
                                                                                                                                     $statusLabel = $statusText[$item->status] ?? 'Unknown';
                                                                                                                                 @endphp
-                                                                                                                                <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
+                                                                                                                                <span class="badge {{ $statusClass }}" style="cursor: pointer;">
+                                                                                                                                    {{ $statusLabel }}
+                                                                                                                                </span>
                                                                                                                             </td>
+
 
 
                                                                                                                             <td class="text-start" rowspan="{{ $totalRows }}">
                                                                                                                                 <div class="d-flex align-items-center gap-2">
-                                                                                                                                    <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
+                                                                                                                                    {{-- <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
                                                                                                                                         data-bs-toggle="modal" data-bs-target="#modalEditBarang">
                                                                                                                                         <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
                                                                                                                                             xmlns="http://www.w3.org/2000/svg">
@@ -160,7 +183,7 @@
                                                                                                                                                 d="M16.862 3.487a1.5 1.5 0 0 1 2.121 0l1.53 1.53a1.5 1.5 0 0 1 0 2.12l-12.9 12.901-4.246.707a1 1 0 0 1-1.164-1.164l.707-4.246 12.952-12.95zM4.79 17.896l2.086.347 11.47-11.471-2.433-2.432L4.79 17.896zm-1.151 1.384l-.632 3.79 3.79-.632-3.158-3.158z"
                                                                                                                                                 fill="#FFFFFF" />
                                                                                                                                         </svg> Edit
-                                                                                                                                    </a>
+                                                                                                                                    </a> --}}
                                                                                                                                     <form
                                                                                                                                         action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
                                                                                                                                         method="POST">
@@ -200,6 +223,47 @@
         </div>
     </div>
 
+    {{-- Modal edit status --}}
+    @if(!empty($penjualanProduk))
+        <div class="modal fade" id="modalEditStatus" tabindex="-1" aria-labelledby="modalEditStatusLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h6 class="modal-title" id="modalEditStatusLabel">Edit Status</h6>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formEditStatus" method="POST"
+                            action="{{ route('penjualan.updateStatus', $penjualanProduk->idPenjualan ?? '') }}">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" id="idPenjualan" name="idPenjualan"
+                                value="{{ $penjualanProduk->idPenjualan ?? '' }}">
+
+                            <!-- Ubah name agar sesuai dengan controller -->
+                            <input type="hidden" id="selectedStatusInput" name="status">
+
+                            <div class="mb-3">
+                                <label for="statusSelect" class="form-label">Pilih Status</label>
+                                <select class="form-select" id="statusSelect">
+                                    <option value="pending">Pending</option>
+                                    <option value="perbaikan">Sedang Diperbaiki</option>
+                                    <option value="selesai">Selesai</option>
+                                    <option value="gagal">Gagal</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex w-100 align-items-end justify-content-end">
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     <!-- Modal Tambah Penjualan -->
     <div class="modal fade" id="modalTambahPenjualan" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl">
@@ -207,7 +271,7 @@
                 <div class="modal-header">
                     <h6 class="modal-title" id="modalLabel">Tambah Penjualan</h6>
                     <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
-                        data-bs-dismiss="alert" aria-label="Close">
+                        data-bs-dismiss="modal" aria-label="Close">
                         <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -396,39 +460,39 @@
                 let row = document.createElement("tr");
 
                 row.innerHTML = `
-                                                                                                                                                                                                                                                <td class="text-center" style="min-width: 50px">
-                                                                                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 50px">
-                                                                                                                                                                                                                                                        ${tabelBody.children.length + 1}
-                                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
-                                                                                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                                                                                                                                                                        ${nama}
-                                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
-                                                                                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                                                                                                                                                                        Rp. ${harga.toLocaleString("id-ID")}
-                                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
-                                                                                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
-                                                                                                                                                                                                                                                        ${kuantitas}
-                                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <td class="text-start" style="min-width: 200px">
-                                                                                                                                                                                                                                                    <p class="text-xs font-weight-bold mb-0 harga-total" style="min-width: 200px" data-harga-total="${hargaQuantity}">
-                                                                                                                                                                                                                                                        Rp. ${hargaQuantity.toLocaleString("id-ID")}
-                                                                                                                                                                                                                                                    </p>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                                <td>
-                                                                                                                                                                                                                                                    <button type="button" class="btn bg-gradient-danger btn-sm mb-0 btn-hapus" onclick="hapusData(this, '${tipe}', '${idProduk}', ${hargaQuantity})">
-                                                                                                                                                                                                                                                        <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                                                                                                                            <path d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                                                                                                                                                                                                            </svg> Hapus
-                                                                                                                                                                                                                                                    </button>
-                                                                                                                                                                                                                                                </td>
-                                                                                                                                                                                                                                            `;
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td class="text-center" style="min-width: 50px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="text-xs font-weight-bold mb-0" style="min-width: 50px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ${tabelBody.children.length + 1}
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ${nama}
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            Rp. ${harga.toLocaleString("id-ID")}
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ${kuantitas}
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td class="text-start" style="min-width: 200px">
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <p class="text-xs font-weight-bold mb-0 harga-total" style="min-width: 200px" data-harga-total="${hargaQuantity}">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            Rp. ${hargaQuantity.toLocaleString("id-ID")}
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </p>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    <td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                        <button type="button" class="btn bg-gradient-danger btn-sm mb-0 btn-hapus" onclick="hapusData(this, '${tipe}', '${idProduk}', ${hargaQuantity})">
+                                                                                                                                                                                                                                                                                                                                                                                                                                            <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                <path d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                                                                                                                                                                                                                                                                                                                                                                                                                </svg> Hapus
+                                                                                                                                                                                                                                                                                                                                                                                                                                        </button>
+                                                                                                                                                                                                                                                                                                                                                                                                                                    </td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                `;
                 tabelBody.appendChild(row);
 
                 // Tambahkan ke array
@@ -466,46 +530,6 @@
             document.getElementById("tambahJasa").addEventListener("click", function () {
                 tambahData("jasa");
             });
-
-            // Form Data Penjualan
-            // form.addEventListener("submit", function (event) {
-            //     event.preventDefault();
-
-            //     if (data.length === 0) {
-            //         alert("Tambahkan setidaknya satu produk atau jasa.");
-            //         return;
-            //     }
-
-            //     console.log("Data sebelum dikirim:", data);
-
-            //     fetch("{{ route('penjualan.store') }}", {
-            //         method: "POST",
-            //         headers: {
-            //             "Content-Type": "application/json",
-            //             "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
-            //         },
-            //         body: JSON.stringify({ data: data })
-            //     })
-            //         .then(response => {
-            //             if (!response.ok) {
-            //                 throw new Error("Terjadi kesalahan pada server.");
-            //             }
-            //             return response.json();
-            //         })
-            //         .then(result => {
-            //             console.log("Response dari server:", result);
-            //             if (result.success) {
-            //                 alert("Data berhasil disimpan!");
-            //                 location.reload();
-            //             } else {
-            //                 alert(result.message || "Gagal menyimpan data.");
-            //             }
-            //         })
-            //         .catch(error => {
-            //             console.error("Error:", error);
-            //             alert("Terjadi kesalahan saat menyimpan data.");
-            //         });
-            // });
 
             form.addEventListener("submit", function (event) {
                 event.preventDefault(); // Pastikan form tidak melakukan reload
@@ -545,6 +569,74 @@
         });
 
     </script>
+
+    {{--
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const modalEditStatus = document.getElementById("modalEditStatus");
+            const formEditStatus = document.getElementById("formEditStatus");
+            const id = "{{ $penjualanProduk->idPenjualan }}"; // Ambil ID penjualan dari blade
+
+            modalEditStatus.addEventListener("show.bs.modal", function (event) {
+                const td = event.relatedTarget; // Ambil elemen yang diklik
+                if (!td || !td.querySelector) return; // Cegah error jika bukan elemen yang valid
+
+                const currentStatus = td.querySelector("span").innerText.trim(); // Ambil teks status
+
+                // Set dropdown sesuai status saat ini
+                const statusSelect = document.getElementById("statusSelect");
+                for (let option of statusSelect.options) {
+                    option.selected = option.text === currentStatus;
+                }
+
+                // Simpan elemen HTML td, bukan string
+                modalEditStatus.targetTd = td;
+            });
+
+            formEditStatus.addEventListener("submit", function (event) {
+                event.preventDefault(); // Mencegah reload halaman
+
+                const selectedStatus = document.getElementById("statusSelect").value; // Ambil status yang dipilih
+                const targetTd = modalEditStatus.targetTd; // Ambil elemen td yang diklik sebelumnya
+
+                if (!targetTd || !targetTd.querySelector) {
+                    console.error("targetTd tidak valid!");
+                    return;
+                }
+
+                console.log("Status yang dipilih:", selectedStatus);
+                console.log("ID Penjualan:", id); // ID penjualan yang diambil dari blade
+
+                // Set nilai selectedStatus pada input tersembunyi
+                const statusInput = document.getElementById("selectedStatusInput");
+                statusInput.value = selectedStatus;
+
+                // Kirim form
+                document.getElementById('formEditStatus').action = `/penjualan/${id}/updateStatus`;
+                formEditStatus.submit(); // Kirim form
+
+                // Tutup modal setelah submit
+                const modalInstance = bootstrap.Modal.getInstance(modalEditStatus);
+                modalInstance.hide();
+            });
+        });
+    </script> --}}
+
+    <script>
+        document.getElementById('statusSelect').addEventListener('change', function () {
+            document.getElementById('selectedStatusInput').value = this.value;
+        });
+
+
+        document.getElementById('formEditStatus').addEventListener('submit', function (event) {
+            const selectedStatus = document.getElementById('selectedStatusInput').value;
+            if (!selectedStatus) {
+                alert('Silakan pilih status terlebih dahulu!');
+                event.preventDefault();
+            }
+        });
+    </script>
+
 
 
 @endsection

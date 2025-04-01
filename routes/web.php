@@ -77,8 +77,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::prefix('penjualan')->group(function () {
 		Route::get('/', [PenjualanController::class, 'index'])->name('penjualan.index');
 		Route::post('/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+		Route::put('/{idPenjualan}/update-status', [PenjualanController::class, 'updateStatus'])->name('penjualan.updateStatus');
 		Route::delete('/{idPenjualan}', [PenjualanController::class, 'destroy'])->name('penjualan.destroy');
 	});
+
 	Route::get('invoice', [InvoiceController::class, 'index'])->name('invoice');
 	Route::get('riwayat', [InvoiceController::class, 'indexRiwayat'])->name('riwayat');
 });
