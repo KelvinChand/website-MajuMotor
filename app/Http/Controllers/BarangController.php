@@ -7,6 +7,7 @@ use App\Models\Barang;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BarangController extends Controller
 {
@@ -54,10 +55,14 @@ class BarangController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil disimpan.');
+            Alert::alert('Berhasil', 'Berhasil menambahkan data Barang!', 'success');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil disimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal disimpan.');
+            Alert::alert('Gagal', 'Gagal membuat data barang!', 'error');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal disimpan.');
         }
     }
 
@@ -90,10 +95,14 @@ class BarangController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil diperbarui.');
+            Alert::alert('Berhasil', 'Berhasil mengupdate data Barang!', 'success');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal diperbarui.');
+            Alert::alert('Gagal', 'Gagal mengupdate data barang!', 'success');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('barang.indexWeb')->with('error', 'Data barang gagal diperbarui.');
         }
     }
 
@@ -106,6 +115,8 @@ class BarangController extends Controller
         }
 
         $Barang->delete();
-        return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil dihapus.');
+        Alert::alert('Berhasil', 'Berhasil menghapus data Barang!', 'success');
+        return redirect()->route('barang.indexWeb');
+        // return redirect()->route('barang.indexWeb')->with('success', 'Data barang berhasil dihapus.');
     }
 }

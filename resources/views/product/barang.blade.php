@@ -232,6 +232,34 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".btn-hapus").forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    let form = this.closest("form");
+
+                    Swal.fire({
+                        title: "Apakah Anda yakin?",
+                        text: "Data yang dihapus tidak bisa dikembalikan!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Ya, hapus!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll('.btn-edit').forEach(button => {

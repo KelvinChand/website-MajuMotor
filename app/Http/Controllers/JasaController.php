@@ -6,6 +6,7 @@ use App\Models\Produk;
 use App\Models\Jasa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class JasaController extends Controller
 {
@@ -50,10 +51,14 @@ class JasaController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil disimpan.');
+            Alert::alert('Berhasil', 'Berhasil menambahkan data Jasa!', 'success');
+            return redirect()->route('jasa.indexWeb');
+            // return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil disimpan.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal disimpan.');
+            Alert::alert('Gagal', 'Gagal membuat data Jasa!', 'error');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal disimpan.');
         }
     }
 
@@ -81,10 +86,14 @@ class JasaController extends Controller
             ]);
 
             DB::commit();
-            return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil diperbarui.');
+            Alert::alert('Berhasil', 'Berhasil mengupdate data Jasa!', 'success');
+            return redirect()->route('jasa.indexWeb');
+            // return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal diperbarui.');
+            Alert::alert('Gagal', 'Gagal mengupdate data Jasa!', 'error');
+            return redirect()->route('barang.indexWeb');
+            // return redirect()->route('jasa.indexWeb')->with('error', 'Data jasa gagal diperbarui.');
         }
     }
 
@@ -97,6 +106,8 @@ class JasaController extends Controller
         }
 
         $Jasa->delete();
-        return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil dihapus.');
+        Alert::alert('Berhasil', 'Berhasil menghapus data Jasa!', 'success');
+        return redirect()->route('jasa.indexWeb');
+        // return redirect()->route('jasa.indexWeb')->with('success', 'Data jasa berhasil dihapus.');
     }
 }

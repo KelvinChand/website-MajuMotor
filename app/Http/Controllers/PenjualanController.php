@@ -9,6 +9,7 @@ use App\Models\Jasa;
 use App\Models\PenjualanProduk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PenjualanController extends Controller
 {
@@ -77,6 +78,8 @@ class PenjualanController extends Controller
             $penjualan->update(['totalHarga' => $totalHarga]);
 
             DB::commit();
+            Alert::alert('Berhasil', 'Berhasil membuat data Penjualan!', 'success');
+            // return redirect()->route('penjualan.index');
             return response()->json([
                 'success' => true,
                 'message' => 'Data penjualan berhasil disimpan.',
@@ -128,7 +131,9 @@ class PenjualanController extends Controller
 
         try {
             $penjualan->update(['status' => $attributes['status']]);
-            return redirect()->route('penjualan.index')->with('success', 'Status penjualan berhasil diperbarui.');
+            Alert::alert('Berhasil', 'Status penjualan berhasil diperbarui.', 'success');
+            return redirect()->route('penjualan.index');
+            // return redirect()->route('penjualan.index')->with('success', 'Status penjualan berhasil diperbarui.');
         } catch (\Exception $e) {
             return redirect()->route('penjualan.index')->with('error', 'Terjadi kesalahan saat memperbarui status penjualan: ' . $e->getMessage());
         }
@@ -149,7 +154,9 @@ class PenjualanController extends Controller
 
             DB::commit();
 
-            return redirect()->route('penjualan.index')->with('success', 'Data penjualan berhasil dihapus.');
+            Alert::alert('Berhasil', 'Data penjualan berhasil dihapus.', 'success');
+            return redirect()->route('penjualan.index');
+            // return redirect()->route('penjualan.index')->with('success', 'Data penjualan berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
 
