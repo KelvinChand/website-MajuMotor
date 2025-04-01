@@ -40,6 +40,7 @@ class BarangController extends Controller
             $produk = Produk::create([
                 'nama' => $attributes['nama'],
                 'harga' => $attributes['harga'],
+                'tipe' => "Barang"
             ]);
 
             if (!$produk || !$produk->idProduk) {

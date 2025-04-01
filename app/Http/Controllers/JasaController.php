@@ -37,6 +37,7 @@ class JasaController extends Controller
             $produk = Produk::create([
                 'nama' => $attributes['nama'],
                 'harga' => $attributes['harga'],
+                'tipe' => "Jasa"
             ]);
 
             if (!$produk || !$produk->idProduk) {

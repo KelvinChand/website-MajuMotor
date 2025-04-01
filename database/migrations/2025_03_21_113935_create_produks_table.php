@@ -15,6 +15,7 @@ return new class extends Migration
             $table->uuid('idProduk')
             ->primary();
             $table->string('nama',25);
+            $table->string('tipe', 10)->nullable();
             $table->double('harga');
             $table->softDeletes();
             $table->timestamps();
