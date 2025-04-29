@@ -129,6 +129,24 @@ class PenjualanController extends Controller
             'status' => ['required', 'in:pending,perbaikan,selesai,gagal']
         ]);
 
+        if ($penjualan->status == 'gagal' && $attributes['status'] == 'gagal') {
+            return response()->json(['message' => 'Penjualan sudah berstatus gagal'], 400);
+        }
+
+        if ($attributes['status'] == 'gagal') {
+            $dataPenjualan = PenjualanProduk::where('idPenjualan', $idPenjualan)->get();
+
+            foreach ($dataPenjualan as $item) {
+                $barang = Barang::where('idProduk', $item->idProduk)->first();
+                if ($barang) {
+                    $barang->stok += $item->kuantitas;
+                    $barang->save();
+                } else {
+                    continue;
+                }
+            }
+        }
+
         try {
             $penjualan->update(['status' => $attributes['status']]);
             Alert::alert('Berhasil', 'Status penjualan berhasil diperbarui.', 'success');
@@ -149,6 +167,16 @@ class PenjualanController extends Controller
 
         DB::beginTransaction();
         try {
+            $dataPenjualan = PenjualanProduk::where('idPenjualan', $idPenjualan)->get();
+            foreach ($dataPenjualan as $item) {
+                $barang = Barang::where('idProduk', $item->idProduk)->first();
+                if ($barang) {
+                    $barang->stok += $item->kuantitas;
+                    $barang->save();
+                } else {
+                    continue;
+                }
+            }
             PenjualanProduk::where('idPenjualan', $idPenjualan)->delete();
             $penjualan->delete();
 
