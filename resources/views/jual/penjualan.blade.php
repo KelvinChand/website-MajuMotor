@@ -7,20 +7,22 @@
             <div class="col-12">
 
                 <div id="alert-container">
-                    @if(session('success'))
+                    @if (session('success'))
                         <div class="alert alert-success alert-dismissible fade show mx-4" role="alert">
                             <span class="text-xs text-white">{{ session('success') }}</span>
-                            <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                            <button type="button"
+                                class="btn-close text-danger d-flex align-items-center justify-content-center"
                                 data-bs-dismiss="alert" aria-label="Close">
                                 <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
                             </button>
                         </div>
                     @endif
 
-                    @if(session('error'))
+                    @if (session('error'))
                         <div class="alert alert-danger alert-dismissible fade show mx-4" role="alert">
                             <span class="text-xs text-white">{{ session('error') }}</span>
-                            <button type="button" class="btn-close text-danger d-flex align-items-center justify-content-center"
+                            <button type="button"
+                                class="btn-close text-danger d-flex align-items-center justify-content-center"
                                 data-bs-dismiss="alert" aria-label="Close">
                                 <span class="text-danger" style="font-size: 20px;" aria-hidden="true">&times;</span>
                             </button>
@@ -90,56 +92,62 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($Penjualan as $index => $item)
-                                                                    @php
-                                                                        $totalRows = $item->penjualanProduk->count();
-                                                                    @endphp
+                                        @php
+                                            $totalRows = $item->penjualanProduk->count();
+                                        @endphp
 
 
 
-                                                                    @foreach ($item->penjualanProduk as $i => $penjualanProduk)
-                                                                                            <tr>
-                                                                                                @if ($i === 0)
-                                                                                                    <td class="ps-4 text-center" rowspan="{{ $totalRows }}">
-                                                                                                        <p class="text-xs font-weight-bold mb-0">{{ $index + 1 }}</p>
-                                                                                                    </td>
-                                                                                                @endif
+                                        @foreach ($item->penjualanProduk as $i => $penjualanProduk)
+                                            <tr>
+                                                @if ($i === 0)
+                                                    <td class="ps-4 text-center" rowspan="{{ $totalRows }}">
+                                                        <p class="text-xs font-weight-bold mb-0">{{ $index + 1 }}</p>
+                                                    </td>
+                                                @endif
 
-                                                                                                <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                                                                    <p class="text-xs font-weight-bold mb-0">
-                                                                                                        {{ $penjualanProduk->produk->nama ?? 'Produk Tidak Ditemukan' }}
-                                                                                                    </p>
-                                                                                                </td>
+                                                <td class="text-start"
+                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
+                                                    <p class="text-xs font-weight-bold mb-0">
+                                                        {{ $penjualanProduk->produk->nama ?? 'Produk Tidak Ditemukan' }}
+                                                    </p>
+                                                </td>
 
-                                                                                                <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                                                                    <p class="text-xs font-weight-bold mb-0">
-                                                                                                        {{ $penjualanProduk->produk->tipe ?? 'Produk Tidak Ditemukan' }}
-                                                                                                    </p>
-                                                                                                </td>
+                                                <td class="text-start"
+                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
+                                                    <p class="text-xs font-weight-bold mb-0">
+                                                        {{ $penjualanProduk->produk->tipe ?? 'Produk Tidak Ditemukan' }}
+                                                    </p>
+                                                </td>
 
-                                                                                                <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                                                                    <p class="text-xs font-weight-bold mb-0">Rp.
-                                                                                                        {{ number_format($penjualanProduk->produk->harga ?? 0, 0, ',', '.') }}
-                                                                                                    </p>
-                                                                                                </td>
+                                                <td class="text-start"
+                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
+                                                    <p class="text-xs font-weight-bold mb-0">Rp.
+                                                        {{ number_format($penjualanProduk->produk->harga ?? 0, 0, ',', '.') }}
+                                                    </p>
+                                                </td>
 
-                                                                                                <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                                                                    <p class="text-xs font-weight-bold mb-0">{{ $penjualanProduk->kuantitas ?? 0 }}
-                                                                                                    </p>
-                                                                                                </td>
+                                                <td class="text-start"
+                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
+                                                    <p class="text-xs font-weight-bold mb-0">
+                                                        {{ $penjualanProduk->kuantitas ?? 0 }}
+                                                    </p>
+                                                </td>
 
-                                                                                                <td class="text-start" style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                                                                    <p class="text-xs font-weight-bold mb-0">Rp.
-                                                                                                        {{ number_format($penjualanProduk->jumlah ?? 0, 0, ',', '.') }}
-                                                                                                    </p>
-                                                                                                </td>
+                                                <td class="text-start"
+                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
+                                                    <p class="text-xs font-weight-bold mb-0">Rp.
+                                                        {{ number_format($penjualanProduk->jumlah ?? 0, 0, ',', '.') }}
+                                                    </p>
+                                                </td>
 
-                                                                                                @if ($i === 0)
-                                                                                                                            <td class="text-start" rowspan="{{ $totalRows }}">
-                                                                                                                                <p class="text-xs font-weight-bold mb-0">Rp.
-                                                                                                                                    {{ number_format($item->totalHarga ?? 0, 0, ',', '.') }}
-                                                                                                                                </p>
-                                                                                                                            </td>
-                                                                                                                            {{-- <td class="text-start" rowspan="{{ $totalRows }}">
+                                                @if ($i === 0)
+                                                    <td class="text-start" rowspan="{{ $totalRows }}">
+                                                        <p class="text-xs font-weight-bold mb-0">Rp.
+                                                            {{ number_format($item->totalHarga ?? 0, 0, ',', '.') }}
+                                                        </p>
+                                                    </td>
+                                                    {{-- <td class="text-start" rowspan="{{ $totalRows }}">
                                                                                                                                 @php
                                                                                                                                 $statusBadge = [
                                                                                                                                 'pending' => 'bg-warning text-dark',
@@ -158,34 +166,35 @@
                                                                                                                                 @endphp
                                                                                                                                 <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
                                                                                                                             </td> --}}
-                                                                                                                            <td class="text-start" rowspan="{{ $totalRows }}" data-bs-toggle="modal"
-                                                                                                                                data-bs-target="#modalEditStatus">
-                                                                                                                                @php
-                                                                                                                                    $statusBadge = [
-                                                                                                                                        'pending' => 'bg-warning text-dark',
-                                                                                                                                        'perbaikan' => 'bg-primary',
-                                                                                                                                        'selesai' => 'bg-success',
-                                                                                                                                        'gagal' => 'bg-danger',
-                                                                                                                                    ];
-                                                                                                                                    $statusText = [
-                                                                                                                                        'pending' => 'Pending',
-                                                                                                                                        'perbaikan' => 'Sedang Diperbaiki',
-                                                                                                                                        'selesai' => 'Selesai',
-                                                                                                                                        'gagal' => 'Gagal',
-                                                                                                                                    ];
-                                                                                                                                    $statusClass = $statusBadge[$item->status] ?? 'bg-secondary';
-                                                                                                                                    $statusLabel = $statusText[$item->status] ?? 'Unknown';
-                                                                                                                                @endphp
-                                                                                                                                <span class="badge {{ $statusClass }}" style="cursor: pointer;">
-                                                                                                                                    {{ $statusLabel }}
-                                                                                                                                </span>
-                                                                                                                            </td>
+                                                    <td class="text-start" rowspan="{{ $totalRows }}"
+                                                        data-bs-toggle="modal" data-bs-target="#modalEditStatus">
+                                                        @php
+                                                            $statusBadge = [
+                                                                'pending' => 'bg-warning text-dark',
+                                                                'perbaikan' => 'bg-primary',
+                                                                'selesai' => 'bg-success',
+                                                                'gagal' => 'bg-danger',
+                                                            ];
+                                                            $statusText = [
+                                                                'pending' => 'Pending',
+                                                                'perbaikan' => 'Sedang Diperbaiki',
+                                                                'selesai' => 'Selesai',
+                                                                'gagal' => 'Gagal',
+                                                            ];
+                                                            $statusClass =
+                                                                $statusBadge[$item->status] ?? 'bg-secondary';
+                                                            $statusLabel = $statusText[$item->status] ?? 'Unknown';
+                                                        @endphp
+                                                        <span class="badge {{ $statusClass }}" style="cursor: pointer;">
+                                                            {{ $statusLabel }}
+                                                        </span>
+                                                    </td>
 
 
 
-                                                                                                                            <td class="text-start" rowspan="{{ $totalRows }}">
-                                                                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                                                                    {{-- <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
+                                                    <td class="text-start" rowspan="{{ $totalRows }}">
+                                                        <div class="d-flex align-items-center gap-2">
+                                                            {{-- <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
                                                                                                                                         data-bs-toggle="modal" data-bs-target="#modalEditBarang">
                                                                                                                                         <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
                                                                                                                                             xmlns="http://www.w3.org/2000/svg">
@@ -194,28 +203,29 @@
                                                                                                                                                 fill="#FFFFFF" />
                                                                                                                                         </svg> Edit
                                                                                                                                     </a> --}}
-                                                                                                                                    <form
-                                                                                                                                        action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
-                                                                                                                                        method="POST">
-                                                                                                                                        @csrf
-                                                                                                                                        @method('DELETE')
-                                                                                                                                        <button type="submit"
-                                                                                                                                            class="btn bg-gradient-danger btn-sm mb-0 btn-hapus"
-                                                                                                                                            data-id="{{ $penjualanProduk->idPenjualan }}">
-                                                                                                                                            <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
-                                                                                                                                                xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                                <path
-                                                                                                                                                    d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
-                                                                                                                                                    stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"
-                                                                                                                                                    stroke-linejoin="round" />
-                                                                                                                                            </svg> Hapus
-                                                                                                                                        </button>
-                                                                                                                                    </form>
-                                                                                                                                </div>
-                                                                                                                            </td>
-                                                                                                @endif
-                                                                                            </tr>
-                                                                    @endforeach
+                                                            <form
+                                                                action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn bg-gradient-danger btn-sm mb-0 btn-hapus"
+                                                                    data-id="{{ $penjualanProduk->idPenjualan }}">
+                                                                    <svg width="12px" height="12px" viewBox="0 0 24 24"
+                                                                        fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path
+                                                                            d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
+                                                                            stroke="#FFFFFF" stroke-width="2"
+                                                                            stroke-linecap="round"
+                                                                            stroke-linejoin="round" />
+                                                                    </svg> Hapus
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </td>
+                                                @endif
+                                            </tr>
+                                        @endforeach
                                     @empty
                                         <tr>
                                             <td colspan="8" class="text-center text-muted">
@@ -234,8 +244,9 @@
     </div>
 
     {{-- Modal edit status --}}
-    @if(!empty($penjualanProduk))
-        <div class="modal fade" id="modalEditStatus" tabindex="-1" aria-labelledby="modalEditStatusLabel" aria-hidden="true">
+    @if (!empty($penjualanProduk))
+        <div class="modal fade" id="modalEditStatus" tabindex="-1" aria-labelledby="modalEditStatusLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -291,11 +302,13 @@
                         <div class="mb-2">
                             <label for="produk_id_barang" class="form-label">Produk Barang</label>
                             <div class="d-flex gap-2">
-                                <select class="form-control" id="produk_id_barang" name="produk_id" style="height: 38px;">
+                                <select class="form-control" id="produk_id_barang" name="produk_id"
+                                    style="height: 38px;">
                                     <option value="" disabled selected>Pilih Produk Barang</option>
                                     @foreach ($barang as $item)
                                         <option value="{{ $item->produk->barang->idBarang }}"
-                                            data-id="{{ $item->produk->idProduk }}" data-nama="{{ $item->produk->nama }}"
+                                            data-id="{{ $item->produk->idProduk }}"
+                                            data-nama="{{ $item->produk->nama }}"
                                             data-harga="{{ $item->produk->harga }}">
                                             {{ $item->produk->nama }}
                                         </option>
@@ -353,7 +366,8 @@
                                     <option value="" disabled selected>Pilih Produk Jasa</option>
                                     @foreach ($jasa as $item)
                                         <option value="{{ $item->produk->jasa->idJasa }}"
-                                            data-id="{{ $item->produk->idProduk }}" data-nama="{{ $item->produk->nama }}"
+                                            data-id="{{ $item->produk->idProduk }}"
+                                            data-nama="{{ $item->produk->nama }}"
                                             data-harga="{{ $item->produk->harga }}">
                                             {{ $item->produk->nama }}
                                         </option>
@@ -429,7 +443,7 @@
 
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault();
             let totalHarga = 0;
             let data = [];
@@ -446,7 +460,8 @@
 
             function tambahData(tipe) {
                 let select = document.getElementById(tipe === "barang" ? "produk_id_barang" : "produk_id_jasa");
-                let quantityInput = document.getElementById(tipe === "barang" ? "insertQuantityBarang" : "insertQuantityJasa");
+                let quantityInput = document.getElementById(tipe === "barang" ? "insertQuantityBarang" :
+                    "insertQuantityJasa");
 
                 if (!select || !quantityInput) {
                     console.error(`Elemen untuk ${tipe} tidak ditemukan.`);
@@ -469,7 +484,8 @@
                 let tabelBody = document.querySelector(`#tabel-${tipe} tbody`);
                 let row = document.createElement("tr");
 
-                row.innerHTML = `<td class="text-center" style="min-width: 50px">
+                row.innerHTML =
+                    `<td class="text-center" style="min-width: 50px">
                                                                                                                                                                                                                                                                                                                                                                                                                                                             <p class="text-xs font-weight-bold mb-0" style="min-width: 50px">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ${tabelBody.children.length + 1}
                                                                                                                                                                                                                                                                                                                                                                                                                                                             </p>
@@ -506,9 +522,15 @@
 
                 // Tambahkan ke array
                 if (tipe === "barang") {
-                    data.push({ idProduk, kuantitas });
+                    data.push({
+                        idProduk,
+                        kuantitas
+                    });
                 } else {
-                    data.push({ idProduk, kuantitas });
+                    data.push({
+                        idProduk,
+                        kuantitas
+                    });
                 }
 
                 totalHarga += hargaQuantity;
@@ -522,7 +544,7 @@
                 console.log('Data', data)
             }
 
-            window.hapusData = function (button, tipe, id, hargaQuantity) {
+            window.hapusData = function(button, tipe, id, hargaQuantity) {
                 button.closest("tr").remove();
                 totalHarga -= hargaQuantity;
                 updateTotalHarga();
@@ -532,15 +554,15 @@
             };
 
 
-            document.getElementById("tambahBarang").addEventListener("click", function () {
+            document.getElementById("tambahBarang").addEventListener("click", function() {
                 tambahData("barang");
             });
 
-            document.getElementById("tambahJasa").addEventListener("click", function () {
+            document.getElementById("tambahJasa").addEventListener("click", function() {
                 tambahData("jasa");
             });
 
-            form.addEventListener("submit", function (event) {
+            form.addEventListener("submit", function(event) {
                 event.preventDefault(); // Pastikan form tidak melakukan reload
 
                 if (data.length === 0) {
@@ -551,19 +573,22 @@
                 console.log('Data sebelum dikirim', data);
 
                 fetch("{{ route('penjualan.store') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
-                    },
-                    body: JSON.stringify({ items: data })
-                })
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute("content"),
+                        },
+                        body: JSON.stringify({
+                            items: data
+                        })
+                    })
                     .then(response => response.json())
                     .then(responseData => {
-                        console.log("Parsed Response:", responseData);
+                        // console.log("Parsed Response:", responseData);
                         if (responseData.success) {
-                            alert("Data berhasil disimpan!");
-                            location.reload();
+                            // alert("Data berhasil disimpan!");
+                            // location.reload();
                         } else {
                             alert("Gagal menyimpan data.");
                         }
@@ -576,16 +601,15 @@
 
 
         });
-
     </script>
 
     <script>
-        document.getElementById('statusSelect').addEventListener('change', function () {
+        document.getElementById('statusSelect').addEventListener('change', function() {
             document.getElementById('selectedStatusInput').value = this.value;
         });
 
 
-        document.getElementById('formEditStatus').addEventListener('submit', function (event) {
+        document.getElementById('formEditStatus').addEventListener('submit', function(event) {
             const selectedStatus = document.getElementById('selectedStatusInput').value;
             if (!selectedStatus) {
                 alert('Silakan pilih status terlebih dahulu!');
@@ -597,9 +621,9 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".btn-hapus").forEach(button => {
-                button.addEventListener("click", function (event) {
+                button.addEventListener("click", function(event) {
                     event.preventDefault();
                     let form = this.closest("form");
 
