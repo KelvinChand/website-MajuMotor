@@ -228,7 +228,7 @@
                                         @endforeach
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted">
+                                            <td colspan="9" class="text-center text-muted">
                                                 <p class="text-xs  mb-0">Tidak ada data penjualan yang tersedia.</p>
                                             </td>
                                         </tr>
