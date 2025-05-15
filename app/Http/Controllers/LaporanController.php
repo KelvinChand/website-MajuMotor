@@ -14,20 +14,53 @@ class LaporanController extends Controller
         $startOfMonth = Carbon::now()->startOfMonth();
         $endOfMonth = Carbon::now()->endOfMonth();
 
-        $pendapatanHarian = Penjualan::selectRaw('DATE(created_at) as tanggal, SUM(totalHarga) as total')
+        // Ambil semua penjualan selesai pada bulan ini beserta relasi produknya
+        $penjualans = Penjualan::with('penjualanProduk.produk')
             ->where('status', 'selesai')
             ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->orderBy('tanggal')
+            ->orderBy('created_at')
             ->get();
 
-        $totalPendapatanBulanIni = $pendapatanHarian->sum('total');
+        // Format ulang data agar bisa dikelompokkan per tanggal
+        $pendapatanPerTanggal = [];
 
-        return view('laporan.pendapatan-cetak', compact(
-            'pendapatanHarian',
-            'totalPendapatanBulanIni',
-            'startOfMonth',
-            'endOfMonth'
-        ));
+        foreach ($penjualans as $penjualan) {
+            $tanggal = $penjualan->created_at->format('Y-m-d');
+
+            // Siapkan array tanggal jika belum ada
+            if (!isset($pendapatanPerTanggal[$tanggal])) {
+                $pendapatanPerTanggal[$tanggal] = [
+                    'tanggal' => $tanggal,
+                    'details' => [],
+                    'total_transaksi' => 0
+                ];
+            }
+
+            foreach ($penjualan->penjualanProduk as $item) {
+                $namaProduk = $item->produk->nama ?? 'Produk Tidak Ditemukan';
+                $harga = $item->produk->harga;
+                $jumlah = $item->kuantitas;
+                $totalPerItem = $harga * $jumlah;
+
+                $pendapatanPerTanggal[$tanggal]['details'][] = [
+                    'nama_produk' => $namaProduk,
+                    'harga_produk' => $harga,
+                    'jumlah_produk' => $jumlah,
+                    'total_produk' => $totalPerItem
+                ];
+
+                $pendapatanPerTanggal[$tanggal]['total_transaksi'] += $totalPerItem;
+            }
+        }
+
+        // Hitung total pendapatan keseluruhan bulan ini
+        $totalPendapatanBulanIni = array_sum(array_column($pendapatanPerTanggal, 'total_transaksi'));
+
+        return view('laporan.pendapatan-cetak', [
+            'pendapatanPerTanggal' => $pendapatanPerTanggal,
+            'totalPendapatanBulanIni' => $totalPendapatanBulanIni,
+            'startOfMonth' => $startOfMonth,
+            'endOfMonth' => $endOfMonth
+        ]);
     }
 }
