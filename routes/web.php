@@ -106,3 +106,7 @@ Route::put('/barang/{idBarang}/update', [BarangController::class, 'update'])->na
 Route::post('/jasa/store', [JasaController::class, 'store'])->name('jasa.store');
 Route::delete('/jasa/{idJasa}', [JasaController::class, 'destroy'])->name('jasa.delete');
 Route::put('/jasa/{idJasa}/update', [JasaController::class, 'update'])->name('jasa.update');
+
+
+Route::get('/laporan/pendapatan/cetak', [\App\Http\Controllers\LaporanController::class, 'cetakPendapatan'])
+    ->name('laporan.pendapatan.cetak');

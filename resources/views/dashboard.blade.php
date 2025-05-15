@@ -6,6 +6,20 @@
     <!-- ALERT NOTIFIKASI -->
     @php
       $penjualanBelumSelesai = \App\Models\Penjualan::whereIn('status', ['pending', 'perbaikan'])->count();
+      $barangStokMinim = \App\Models\Barang::with('produk')->where('stok','<','5')->get();
+      use Carbon\Carbon;
+      use Illuminate\Support\Facades\DB;
+
+      $startOfMonth = Carbon::now()->startOfMonth();
+      $endOfMonth = Carbon::now()->endOfMonth();
+
+      $pendapatanHarian = \App\Models\Penjualan::selectRaw('DATE(created_at) as tanggal, SUM(totalHarga) as total')
+        ->where('status', 'selesai')
+        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+        ->groupBy(DB::raw('DATE(created_at)'))
+        ->orderBy('tanggal')
+        ->get();
+        $totalPendapatanBulanIni = $pendapatanHarian->sum('total');
   @endphp
 
     @if ($penjualanBelumSelesai > 0)
@@ -14,6 +28,33 @@
     <a href="{{ url('penjualan') }}" class="alert-link">Cek sekarang</a>.
     </div>
   @endif
+
+<!-- ALERT STOK BARANG MINIM (per barang) -->
+@foreach ($barangStokMinim as $barang)
+  <div class="alert alert-danger text-white mt-4" role="alert">
+    <strong>Stok Barang Menipis!</strong><br />
+    <b>{{ $barang->produk->nama }}</b> hanya tersisa <b>{{ $barang->stok }}</b> di stok.
+    <a href="{{ url('barang') }}" class="alert-link">Cek sekarang</a>
+  </div>
+@endforeach
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+      <div class="card text-white bg-success h-100">
+        <div class="card-body">
+          <h5 class="card-title">Pendapatan Bulan Ini</h5>
+          <p class="card-text fs-4">Rp {{ number_format($totalPendapatanBulanIni, 0, ',', '.') }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-end mb-4">
+        <a href="{{ route('laporan.pendapatan.cetak') }}" target="_blank" class="btn btn-primary">
+          <i class="bx bx-printer me-1"></i> Cetak Laporan Pendapatan
+        </a>
+      </div>
+
+
     <div class="row g-2 d-flex justify-content-between">
     <div class="col-xl-3 col-md-6 col-sm-12">
       <a class="nav-link {{ (Request::is('barang') ? 'active' : '') }}" href="{{ url('barang') }}">
