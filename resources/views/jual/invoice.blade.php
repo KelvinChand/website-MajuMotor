@@ -27,10 +27,6 @@
                                         </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Tipe
-                                        </th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Harga Produk
                                         </th>
                                         <th
@@ -68,13 +64,6 @@
                                                     <p class="text-xs font-weight-bold mb-0">
                                                         {{ $penjualanProduk->produk->nama ?? 'Produk Tidak Ditemukan' }}</p>
                                                 </td>
-
-                                                <td class="text-start"
-                                                    style="min-width: 200px; border-bottom: 1px solid #ddd;">
-                                                    <p class="text-xs font-weight-bold mb-0">
-                                                        {{ $penjualanProduk->produk->tipe ?? 'Produk Tidak Ditemukan' }}</p>
-                                                </td>
-
                                                 {{-- Harga Produk --}}
                                                 <td class="text-start"
                                                     style="min-width: 200px; border-bottom: 1px solid #ddd;">

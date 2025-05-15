@@ -50,7 +50,7 @@
 
     <div class="text-end mb-4">
         <a href="{{ route('laporan.pendapatan.cetak') }}" target="_blank" class="btn btn-primary">
-          <i class="bx bx-printer me-1"></i> Cetak Laporan Pendapatan
+          <i class="bx bx-printer me-1"></i> Cetak Laporan Penjualan
         </a>
       </div>
 
