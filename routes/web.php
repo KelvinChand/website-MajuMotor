@@ -110,3 +110,6 @@ Route::put('/jasa/{idJasa}/update', [JasaController::class, 'update'])->name('ja
 
 Route::get('/laporan/pendapatan/cetak', [\App\Http\Controllers\LaporanController::class, 'cetakPendapatan'])
     ->name('laporan.pendapatan.cetak');
+
+Route::get('/penjualan/print/{id}', [PenjualanController::class, 'print'])->name('penjualan.print');
+

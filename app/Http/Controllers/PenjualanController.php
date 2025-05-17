@@ -27,6 +27,13 @@ class PenjualanController extends Controller
         return view('jual.penjualan', compact('Penjualan', 'jasa', 'barang'));
     }
 
+    public function print($id)
+    {
+        $penjualan = Penjualan::with('penjualanProduk.produk')->findOrFail($id);
+        
+        // Logika cetak termal atau PDF
+        return view('jual.struk', compact('penjualan'));
+    }
 
     public function store(Request $request)
     {

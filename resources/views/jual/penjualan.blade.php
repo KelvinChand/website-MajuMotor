@@ -180,24 +180,47 @@
 
                                                     <td class="text-start" rowspan="{{ $totalRows }}">
                                                         <div class="d-flex align-items-center gap-2">
-                                                            <form
-                                                                action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn bg-gradient-danger btn-sm mb-0 btn-hapus"
-                                                                    data-id="{{ $penjualanProduk->idPenjualan }}">
+
+
+                                                            <div class="d-flex align-items-center gap-2">
+                                                                <!-- Tombol Cetak -->
+                                                                <a href="{{ route('penjualan.print', $penjualanProduk->idPenjualan) }}"
+                                                                    target="_blank"
+                                                                    class="btn bg-gradient-info btn-sm mb-0">
                                                                     <svg width="12px" height="12px" viewBox="0 0 24 24"
                                                                         fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                        <path
-                                                                            d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
-                                                                            stroke="#FFFFFF" stroke-width="2"
-                                                                            stroke-linecap="round"
+                                                                        <path d="M6 9V4h12v5" stroke="#FFFFFF"
+                                                                            stroke-width="2" stroke-linecap="round"
                                                                             stroke-linejoin="round" />
-                                                                    </svg> Hapus
-                                                                </button>
-                                                            </form>
+                                                                        <path d="M6 18h12v2H6z" fill="#FFFFFF" />
+                                                                        <path d="M6 14h12v4H6z" stroke="#FFFFFF"
+                                                                            stroke-width="2" stroke-linecap="round"
+                                                                            stroke-linejoin="round" />
+                                                                    </svg> Cetak
+                                                                </a>
+
+                                                                <!-- Tombol Hapus -->
+                                                                <form
+                                                                    action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="btn bg-gradient-danger btn-sm mb-0 btn-hapus"
+                                                                        data-id="{{ $penjualanProduk->idPenjualan }}">
+                                                                        <svg width="12px" height="12px"
+                                                                            viewBox="0 0 24 24" fill="none"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path
+                                                                                d="M3 6h18M9 6V4a3 3 0 0 1 6 0v2m2 0v14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V6h10z"
+                                                                                stroke="#FFFFFF" stroke-width="2"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round" />
+                                                                        </svg> Hapus
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+
                                                         </div>
                                                     </td>
                                                 @endif
