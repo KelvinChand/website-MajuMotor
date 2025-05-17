@@ -58,7 +58,7 @@
                                             <tr>
                                                 @if ($i == 0)
                                                     <td class="ps-4 text-center" rowspan="{{ $totalRows }}">
-                                                        <p class="text-xs font-weight-bold mb-0">{{ $index + 1 }}</p>
+                                                        <p class="text-xs font-weight-bold mb-0">{{ $Penjualan->firstItem() + $index }}</p>
                                                     </td>
                                                 @endif
 
@@ -121,8 +121,10 @@
                                         </tr>
                                     @endforelse
                                 </tbody>
-
                             </table>
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $Penjualan->links('vendor.pagination.custom') }}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -76,7 +76,8 @@
                                     @forelse ($jasa as $index => $item)
                                         <tr>
                                             <td class="ps-4" style="max-width: 200px">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $index + 1 }}</p>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $jasa->firstItem() + $index }}
+                                                </p>
                                             </td>
                                             <td class="text-start" style="min-width: 200px">
                                                 <p class="text-xs font-weight-bold mb-0" style="min-width: 200px">
@@ -141,7 +142,9 @@
                                     @endforelse
                                 </tbody>
                             </table>
-
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $jasa->links('vendor.pagination.custom') }}
+                            </div>
                         </div>
                     </div>
                 </div>

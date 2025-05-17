@@ -12,7 +12,7 @@ class JasaController extends Controller
 {
     public function index()
     {
-        $Jasa = Jasa::with('produk')->get();
+        $Jasa = Jasa::with('produk')->paginate(10);
         return response()->json([
             'message' => 'Data Jasa berhasil diambil',
             'data' => $Jasa
@@ -20,7 +20,7 @@ class JasaController extends Controller
     }
     public function indexWeb()
     {
-        $jasa = Jasa::with('produk')->get();
+        $jasa = Jasa::with('produk')->paginate(10);
         return view('product.jasa', compact('jasa'));
     }
 

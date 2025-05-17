@@ -11,13 +11,13 @@ class InvoiceController extends Controller
     {
         $Penjualan = Penjualan::with('penjualanProduk.produk')
         ->where('status', 'selesai')
-        ->get();
+        ->paginate(10);
         return view('jual.invoice', compact('Penjualan'));
     }
 
     public function indexRiwayat()
     {
-        $Penjualan = Penjualan::with('penjualanProduk.produk')->get();
+        $Penjualan = Penjualan::with('penjualanProduk.produk')->paginate(10);
         return view('jual.riwayat', compact('Penjualan'));
     }
 }

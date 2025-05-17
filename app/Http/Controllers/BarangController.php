@@ -13,7 +13,7 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $Barang = Barang::with('produk')->get();
+        $Barang = Barang::with('produk')->paginate(10);
         return response()->json([
             'message' => 'Data Barang berhasil diambil',
             'data' => $Barang
@@ -22,7 +22,7 @@ class BarangController extends Controller
 
     public function indexWeb()
     {
-        $barang = Barang::with('produk')->get();
+        $barang = Barang::with('produk')->paginate(10);
         return view('product.barang', compact('barang'));
     }
 

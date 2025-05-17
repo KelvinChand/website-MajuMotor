@@ -18,7 +18,7 @@ class PenjualanController extends Controller
         $Penjualan = Penjualan::with('penjualanProduk.produk')
             ->whereNotIn('status', ['selesai', 'gagal'])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(10);
 
         // Pastikan $jasa dan $barang tetap didefinisikan meskipun $Penjualan kosong
         $jasa = Jasa::with('produk')->get();
