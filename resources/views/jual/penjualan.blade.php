@@ -102,7 +102,8 @@
                                             <tr>
                                                 @if ($i === 0)
                                                     <td class="ps-4 text-center" rowspan="{{ $totalRows }}">
-                                                        <p class="text-xs font-weight-bold mb-0">{{ $Penjualan->firstItem() + $index }}</p>
+                                                        <p class="text-xs font-weight-bold mb-0">
+                                                            {{ $Penjualan->firstItem() + $index }}</p>
                                                     </td>
                                                 @endif
 
@@ -147,27 +148,11 @@
                                                             {{ number_format($item->totalHarga ?? 0, 0, ',', '.') }}
                                                         </p>
                                                     </td>
-                                                    {{-- <td class="text-start" rowspan="{{ $totalRows }}">
-                                                                                                                                @php
-                                                                                                                                $statusBadge = [
-                                                                                                                                'pending' => 'bg-warning text-dark',
-                                                                                                                                'perbaikan' => 'bg-primary',
-                                                                                                                                'selesai' => 'bg-success',
-                                                                                                                                'gagal' => 'bg-danger',
-                                                                                                                                ];
-                                                                                                                                $statusText = [
-                                                                                                                                'pending' => 'Pending',
-                                                                                                                                'perbaikan' => 'Sedang Diperbaiki',
-                                                                                                                                'selesai' => 'Selesai',
-                                                                                                                                'gagal' => 'Gagal',
-                                                                                                                                ];
-                                                                                                                                $statusClass = $statusBadge[$item->status] ?? 'bg-secondary';
-                                                                                                                                $statusLabel = $statusText[$item->status] ?? 'Unknown';
-                                                                                                                                @endphp
-                                                                                                                                <span class="badge {{ $statusClass }}">{{ $statusLabel }}</span>
-                                                                                                                            </td> --}}
-                                                    <td class="text-start" rowspan="{{ $totalRows }}"
-                                                        data-bs-toggle="modal" data-bs-target="#modalEditStatus">
+
+                                                    <td class="text-start btn-edit-status" rowspan="{{ $totalRows }}"
+                                                        data-bs-toggle="modal" data-bs-target="#modalEditStatus"
+                                                        data-id="{{ $item->idPenjualan }}"
+                                                        data-status="{{ $item->status }}">
                                                         @php
                                                             $statusBadge = [
                                                                 'pending' => 'bg-warning text-dark',
@@ -192,17 +177,9 @@
 
 
 
+
                                                     <td class="text-start" rowspan="{{ $totalRows }}">
                                                         <div class="d-flex align-items-center gap-2">
-                                                            {{-- <a href="#" class="btn bg-gradient-warning btn-sm mb-0 me-2 btn-edit"
-                                                                                                                                        data-bs-toggle="modal" data-bs-target="#modalEditBarang">
-                                                                                                                                        <svg width="12px" height="12px" viewBox="0 0 24 24" fill="none"
-                                                                                                                                            xmlns="http://www.w3.org/2000/svg">
-                                                                                                                                            <path
-                                                                                                                                                d="M16.862 3.487a1.5 1.5 0 0 1 2.121 0l1.53 1.53a1.5 1.5 0 0 1 0 2.12l-12.9 12.901-4.246.707a1 1 0 0 1-1.164-1.164l.707-4.246 12.952-12.95zM4.79 17.896l2.086.347 11.47-11.471-2.433-2.432L4.79 17.896zm-1.151 1.384l-.632 3.79 3.79-.632-3.158-3.158z"
-                                                                                                                                                fill="#FFFFFF" />
-                                                                                                                                        </svg> Edit
-                                                                                                                                    </a> --}}
                                                             <form
                                                                 action="{{ route('penjualan.destroy', $penjualanProduk->idPenjualan) }}"
                                                                 method="POST">
@@ -447,7 +424,7 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            event.preventDefault();
+            // event.preventDefault();
             let totalHarga = 0;
             let data = [];
 
@@ -588,10 +565,11 @@
                     })
                     .then(response => response.json())
                     .then(responseData => {
+
                         // console.log("Parsed Response:", responseData);
                         if (responseData.success) {
-                            // alert("Data berhasil disimpan!");
-                            // location.reload();
+                            //alert("Data berhasil disimpan!");
+                            location.reload();
                         } else {
                             alert("Gagal menyimpan data.");
                         }
@@ -622,6 +600,32 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const editStatusCells = document.querySelectorAll(".btn-edit-status");
+
+            editStatusCells.forEach(cell => {
+                cell.addEventListener("click", function() {
+                    const idPenjualan = this.getAttribute("data-id");
+                    const status = this.getAttribute("data-status");
+
+                    document.getElementById("idPenjualan").value = idPenjualan;
+                    document.getElementById("selectedStatusInput").value = status;
+                    document.getElementById("statusSelect").value = status;
+
+                    // Update form action jika kamu pakai ID dalam URL
+                    const form = document.getElementById("formEditStatus");
+                    form.action = `/penjualan/${idPenjualan}/update-status`; // atau pakai route JS
+                });
+            });
+
+            // Pastikan input tersembunyi ikut berubah kalau dropdown diubah
+            document.getElementById("statusSelect").addEventListener("change", function() {
+                document.getElementById("selectedStatusInput").value = this.value;
+            });
+        });
+    </script>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {

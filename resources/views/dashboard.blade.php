@@ -1,102 +1,108 @@
 @extends('layouts.user_type.auth')
 
 @section('content')
+    <div class="container-fluid">
+        <!-- ALERT NOTIFIKASI -->
+        @php
+            $penjualanBelumSelesai = \App\Models\Penjualan::whereIn('status', ['pending', 'perbaikan'])->count();
+            $barangStokMinim = \App\Models\Barang::with('produk')->where('stok', '<', '5')->get();
+            use Carbon\Carbon;
+            use Illuminate\Support\Facades\DB;
 
-  <div class="container-fluid">
-    <!-- ALERT NOTIFIKASI -->
-    @php
-      $penjualanBelumSelesai = \App\Models\Penjualan::whereIn('status', ['pending', 'perbaikan'])->count();
-      $barangStokMinim = \App\Models\Barang::with('produk')->where('stok','<','5')->get();
-      use Carbon\Carbon;
-      use Illuminate\Support\Facades\DB;
+            $startOfMonth = Carbon::now()->startOfMonth();
+            $endOfMonth = Carbon::now()->endOfMonth();
 
-      $startOfMonth = Carbon::now()->startOfMonth();
-      $endOfMonth = Carbon::now()->endOfMonth();
+            $pendapatanHarian = \App\Models\Penjualan::selectRaw(
+                'DATE(created_at) as tanggal, SUM(totalHarga) as total',
+            )
+                ->where('status', 'selesai')
+                ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                ->groupBy(DB::raw('DATE(created_at)'))
+                ->orderBy('tanggal')
+                ->get();
+            $totalPendapatanBulanIni = $pendapatanHarian->sum('total');
+        @endphp
 
-      $pendapatanHarian = \App\Models\Penjualan::selectRaw('DATE(created_at) as tanggal, SUM(totalHarga) as total')
-        ->where('status', 'selesai')
-        ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-        ->groupBy(DB::raw('DATE(created_at)'))
-        ->orderBy('tanggal')
-        ->get();
-        $totalPendapatanBulanIni = $pendapatanHarian->sum('total');
-  @endphp
+        @if ($penjualanBelumSelesai > 0)
+            <div class="alert alert-warning mt-4" role="alert">
+                <strong>Pemberitahuan!</strong> <br /> Ada <b>{{ $penjualanBelumSelesai }}</b> penjualan yang belum selesai.
+                <a href="{{ url('penjualan') }}" class="alert-link">Cek sekarang</a>.
+            </div>
+        @endif
 
-    @if ($penjualanBelumSelesai > 0)
-    <div class="alert alert-warning mt-4" role="alert">
-    <strong>Pemberitahuan!</strong> <br /> Ada <b>{{ $penjualanBelumSelesai }}</b> penjualan yang belum selesai.
-    <a href="{{ url('penjualan') }}" class="alert-link">Cek sekarang</a>.
-    </div>
-  @endif
-
-<!-- ALERT STOK BARANG MINIM (per barang) -->
-@foreach ($barangStokMinim as $barang)
-  <div class="alert alert-danger text-white mt-4" role="alert">
-    <strong>Stok Barang Menipis!</strong><br />
-    <b>{{ $barang->produk->nama }}</b> hanya tersisa <b>{{ $barang->stok }}</b> di stok.
-    <a href="{{ url('barang') }}" class="alert-link">Cek sekarang</a>
-  </div>
-@endforeach
-
-<div class="row mt-4">
-    <div class="col-md-4 mb-4">
-      <div class="card text-white bg-success h-100">
-        <div class="card-body">
-          <h5 class="card-title">Pendapatan Bulan Ini</h5>
-          <p class="card-text fs-4">Rp {{ number_format($totalPendapatanBulanIni, 0, ',', '.') }}</p>
+        <!-- ALERT STOK BARANG MINIM (per barang) -->
+        <div class="alert alert-danger text-white mt-4" role="alert">
+            <strong>Stok Barang Menipis!</strong><br />
+            @foreach ($barangStokMinim as $barang)
+                <b>{{ $barang->produk->nama }}</b> hanya tersisa <b>{{ $barang->stok }}</b> di stok.
+                <a href="{{ url('barang') }}" class="alert-link">Cek sekarang</a>
+                <br>
+            @endforeach
         </div>
-      </div>
-    </div>
 
-    <div class="text-end mb-4">
-        <a href="{{ route('laporan.pendapatan.cetak') }}" target="_blank" class="btn btn-primary">
-          <i class="bx bx-printer me-1"></i> Cetak Laporan Penjualan
-        </a>
-      </div>
+        <div class="row mt-4">
 
 
-    <div class="row g-2 d-flex justify-content-between">
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <a class="nav-link {{ (Request::is('barang') ? 'active' : '') }}" href="{{ url('barang') }}">
-      <div class="card text-center">
-        <div class="card-body p-3">
-        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-          <i class="ni ni-box-2 text-white" style="font-size: 40px;" aria-hidden="true"></i>
-        </div>
-        <h6 class="font-weight-bolder mb-0">Data Barang</h6>
-        </div>
-      </div>
-      </a>
-    </div>
 
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <a class="nav-link {{ (Request::is('jasa') ? 'active' : '') }}" href="{{ url('jasa') }}">
-      <div class="card text-center">
-        <div class="card-body p-3">
-        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-          <i class="ni ni-briefcase-24 text-white" style="font-size: 40px;" aria-hidden="true"></i>
-        </div>
-        <h6 class="font-weight-bolder mb-0">Data Jasa</h6>
-        </div>
-      </div>
-      </a>
-    </div>
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="card text-white bg-success me-3" style="flex: 1;">
+                    <div class="p-4">
+                        <h5 class="card-title">Pendapatan Bulan Ini</h5>
+                        <p class="card-text fs-4">Rp {{ number_format($totalPendapatanBulanIni, 0, ',', '.') }}</p>
+                    </div>
+                </div>
 
-    <div class="col-xl-3 col-md-6 col-sm-12">
-      <a class="nav-link {{ (Request::is('penjualan') ? 'active' : '') }}" href="{{ url('penjualan') }}">
-      <div class="card text-center">
-        <div class="card-body p-3">
-        <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
-          style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-          <i class="ni ni-cart text-white" style="font-size: 40px;" aria-hidden="true"></i>
-        </div>
-        <h6 class="font-weight-bolder mb-0">Data Penjualan</h6>
-        </div>
-      </div>
-      </a>
-    </div>
+                <div>
+                    <a href="{{ route('laporan.pendapatan.cetak') }}" target="_blank" class="btn btn-primary">
+                        <i class="bx bx-printer me-1"></i> Cetak Laporan Penjualan
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="row g-2 d-flex justify-content-between">
+                <div class="col-xl-3 col-md-6 col-sm-12">
+                    <a class="nav-link {{ Request::is('barang') ? 'active' : '' }}" href="{{ url('barang') }}">
+                        <div class="card text-center">
+                            <div class="card-body p-3">
+                                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+                                    style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="ni ni-box-2 text-white" style="font-size: 40px;" aria-hidden="true"></i>
+                                </div>
+                                <h6 class="font-weight-bolder mb-0">Data Barang</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 col-sm-12">
+                    <a class="nav-link {{ Request::is('jasa') ? 'active' : '' }}" href="{{ url('jasa') }}">
+                        <div class="card text-center">
+                            <div class="card-body p-3">
+                                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+                                    style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="ni ni-briefcase-24 text-white" style="font-size: 40px;"
+                                        aria-hidden="true"></i>
+                                </div>
+                                <h6 class="font-weight-bolder mb-0">Data Jasa</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col-xl-3 col-md-6 col-sm-12">
+                    <a class="nav-link {{ Request::is('penjualan') ? 'active' : '' }}" href="{{ url('penjualan') }}">
+                        <div class="card text-center">
+                            <div class="card-body p-3">
+                                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md mx-auto mb-3"
+                                    style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="ni ni-cart text-white" style="font-size: 40px;" aria-hidden="true"></i>
+                                </div>
+                                <h6 class="font-weight-bolder mb-0">Data Penjualan</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
     <div class="col-xl-3 col-md-6 col-sm-12">
       <a class="nav-link {{ (Request::is('invoice') ? 'active' : '') }}" href="{{ url('invoice') }}">
@@ -115,7 +121,7 @@
   </div>
 
 
-  {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+        {{-- <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
     <div class="card">
     <div class="card-body p-3">
       <div class="row">
@@ -203,8 +209,8 @@
     </div>
     </div>
   </div> --}}
-  </div>
-  {{-- <div class="row mt-4">
+    </div>
+    {{-- <div class="row mt-4">
     <div class="col-lg-7 mb-lg-0 mb-4">
     <div class="card">
       <div class="card-body p-3">
@@ -253,7 +259,7 @@
     </div>
     </div>
   </div> --}}
-  {{-- <div class="row mt-4">
+    {{-- <div class="row mt-4">
     <div class="col-lg-5 mb-lg-0 mb-4">
     <div class="card z-index-2">
       <div class="card-body p-3">
@@ -421,7 +427,7 @@
     </div>
     </div>
   </div> --}}
-  {{-- <div class="row my-4">
+    {{-- <div class="row my-4">
     <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
     <div class="card">
       <div class="card-header pb-0">
@@ -790,179 +796,178 @@
     </div>
     </div>
   </div> --}}
-
 @endsection
 @push('dashboard')
-  <script>
-    window.onload = function () {
-    var ctx = document.getElementById("chart-bars").getContext("2d");
+    <script>
+        window.onload = function() {
+            var ctx = document.getElementById("chart-bars").getContext("2d");
 
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-      labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      datasets: [{
-        label: "Sales",
-        tension: 0.4,
-        borderWidth: 0,
-        borderRadius: 4,
-        borderSkipped: false,
-        backgroundColor: "#fff",
-        data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
-        maxBarThickness: 6
-      },],
-      },
-      options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-        display: false,
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{
+                        label: "Sales",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        borderRadius: 4,
+                        borderSkipped: false,
+                        backgroundColor: "#fff",
+                        data: [450, 200, 100, 220, 500, 100, 400, 230, 500],
+                        maxBarThickness: 6
+                    }, ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                            },
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 500,
+                                beginAtZero: true,
+                                padding: 15,
+                                font: {
+                                    size: 14,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                                color: "#fff"
+                            },
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false
+                            },
+                            ticks: {
+                                display: false
+                            },
+                        },
+                    },
+                },
+            });
+
+
+            var ctx2 = document.getElementById("chart-line").getContext("2d");
+
+            var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
+
+            gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
+            gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
+
+            var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
+
+            gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
+            gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
+            gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
+
+            new Chart(ctx2, {
+                type: "line",
+                data: {
+                    labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                    datasets: [{
+                            label: "Mobile apps",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#cb0c9f",
+                            borderWidth: 3,
+                            backgroundColor: gradientStroke1,
+                            fill: true,
+                            data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                            maxBarThickness: 6
+
+                        },
+                        {
+                            label: "Websites",
+                            tension: 0.4,
+                            borderWidth: 0,
+                            pointRadius: 0,
+                            borderColor: "#3A416F",
+                            borderWidth: 3,
+                            backgroundColor: gradientStroke2,
+                            fill: true,
+                            data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+                            maxBarThickness: 6
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false,
+                        }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index',
+                    },
+                    scales: {
+                        y: {
+                            grid: {
+                                drawBorder: false,
+                                display: true,
+                                drawOnChartArea: true,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                padding: 10,
+                                color: '#b2b9bf',
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                        x: {
+                            grid: {
+                                drawBorder: false,
+                                display: false,
+                                drawOnChartArea: false,
+                                drawTicks: false,
+                                borderDash: [5, 5]
+                            },
+                            ticks: {
+                                display: true,
+                                color: '#b2b9bf',
+                                padding: 20,
+                                font: {
+                                    size: 11,
+                                    family: "Open Sans",
+                                    style: 'normal',
+                                    lineHeight: 2
+                                },
+                            }
+                        },
+                    },
+                },
+            });
         }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index',
-      },
-      scales: {
-        y: {
-        grid: {
-          drawBorder: false,
-          display: false,
-          drawOnChartArea: false,
-          drawTicks: false,
-        },
-        ticks: {
-          suggestedMin: 0,
-          suggestedMax: 500,
-          beginAtZero: true,
-          padding: 15,
-          font: {
-          size: 14,
-          family: "Open Sans",
-          style: 'normal',
-          lineHeight: 2
-          },
-          color: "#fff"
-        },
-        },
-        x: {
-        grid: {
-          drawBorder: false,
-          display: false,
-          drawOnChartArea: false,
-          drawTicks: false
-        },
-        ticks: {
-          display: false
-        },
-        },
-      },
-      },
-    });
-
-
-    var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-    var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-    gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-    var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-    gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-    gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-    gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-    new Chart(ctx2, {
-      type: "line",
-      data: {
-      labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-      datasets: [{
-        label: "Mobile apps",
-        tension: 0.4,
-        borderWidth: 0,
-        pointRadius: 0,
-        borderColor: "#cb0c9f",
-        borderWidth: 3,
-        backgroundColor: gradientStroke1,
-        fill: true,
-        data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-        maxBarThickness: 6
-
-      },
-      {
-        label: "Websites",
-        tension: 0.4,
-        borderWidth: 0,
-        pointRadius: 0,
-        borderColor: "#3A416F",
-        borderWidth: 3,
-        backgroundColor: gradientStroke2,
-        fill: true,
-        data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
-        maxBarThickness: 6
-      },
-      ],
-      },
-      options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: {
-        display: false,
-        }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'index',
-      },
-      scales: {
-        y: {
-        grid: {
-          drawBorder: false,
-          display: true,
-          drawOnChartArea: true,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          padding: 10,
-          color: '#b2b9bf',
-          font: {
-          size: 11,
-          family: "Open Sans",
-          style: 'normal',
-          lineHeight: 2
-          },
-        }
-        },
-        x: {
-        grid: {
-          drawBorder: false,
-          display: false,
-          drawOnChartArea: false,
-          drawTicks: false,
-          borderDash: [5, 5]
-        },
-        ticks: {
-          display: true,
-          color: '#b2b9bf',
-          padding: 20,
-          font: {
-          size: 11,
-          family: "Open Sans",
-          style: 'normal',
-          lineHeight: 2
-          },
-        }
-        },
-      },
-      },
-    });
-    }
-  </script>
+    </script>
 @endpush
